@@ -1,3 +1,4 @@
+import Footer from '../components/Footer';
 import Navbar from '../components/Navbar';
 
 const Dashboard = () => {
@@ -6,6 +7,7 @@ const Dashboard = () => {
 			<Navbar />
 			<h2>Dashboard</h2>
 			{/* Add more dashboard features */}
+			<Footer />
 		</div>
 	);
 };
