@@ -6,11 +6,6 @@ import Login from './components/Login';
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('isLoggedIn') === 'true');
 
-  const handleLogout = () => {
-    localStorage.removeItem('isLoggedIn');
-    setIsLoggedIn(false);
-  };
-
   return (
     <Router>
       <Routes>
@@ -19,7 +14,7 @@ const App = () => {
           path="/dashboard"
           element={
             isLoggedIn ? (
-              <Dashboard onLogout={handleLogout} />
+              <Dashboard />
             ) : (
               <Navigate to="/login" />
             )

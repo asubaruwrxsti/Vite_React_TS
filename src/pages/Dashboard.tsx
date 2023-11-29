@@ -1,13 +1,9 @@
 import Navbar from '../components/Navbar';
 
-type DashboardProps = {
-  onLogout: () => void;
-};
-
-const Dashboard = ({ onLogout }: DashboardProps) => {
+const Dashboard = () => {
   return (
     <div>
-      <Navbar isLoggedIn={true} onLogout={onLogout} />
+      <Navbar />
       <h2>Dashboard</h2>
       {/* Add more dashboard features */}
     </div>
