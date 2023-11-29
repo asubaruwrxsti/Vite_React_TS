@@ -22,23 +22,43 @@ const Login = ({ onLogin }: LoginProps) => {
 	<>
 		<Navbar />
 		<div className="flex flex-col items-center justify-center">
-			<div className="bg-red-500 text-white px-4 py-4 rounded mb-2 mt-2">
+			<div className="bg-red-500 text-white px-4 py-4 rounded mb-4 mt-2">
 				<div>Please login to continue</div>
 			</div>
 			<div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col">
-				<label>
-					Username:
-					<input type="text" value={username} onChange={(e) => setUsername(e.target.value)} 
-					className='shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
+				<div className='col-span-6 sm:col-span-3'>
+					<label htmlFor='username' className='block text-sm font-medium text-gray-700'>
+						Username
+					</label>
+					<input
+						type='text'
+						name='username'
+						id='username'
+						autoComplete='username'
+						value={username}
+						onChange={(e) => setUsername(e.target.value)}
+						className='mt-3 block w-full shadow-sm sm:text-sm border-gray-300'
 					/>
-				</label>
-				<label>
-					Password:
-					<input type="password" value={password} onChange={(e) => setPassword(e.target.value)} 
-					className='shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
+				</div>
+				<div className='col-span-6 sm:col-span-3'>
+					<label htmlFor='password' className='block text-sm font-medium text-gray-700'>
+						Password
+					</label>
+					<input
+						type='password'
+						name='password'
+						id='password'
+						autoComplete='password'
+						value={password}
+						onChange={(e) => setPassword(e.target.value)}
+						className='mt-3 block w-full shadow-sm sm:text-sm border-gray-300'
 					/>
-				</label>
-				<button onClick={handleLogin}>Login</button>
+				</div>
+				<button onClick={handleLogin}
+				className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mt-3 rounded focus:outline-none focus:shadow-outline'
+				>
+					Login
+				</button>
 			</div>
 		</div>
  	</>

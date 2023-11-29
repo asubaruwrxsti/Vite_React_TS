@@ -12,7 +12,14 @@ const Navbar = () => {
     <>
       <nav className="bg-gray-800 p-4">
         <div className="container mx-auto flex justify-between items-center">
-          <div className="text-white font-bold text-xl">Travel Agency</div>
+          <div className="text-white font-bold text-xl">
+            <img
+              src="/workflow-mark-indigo-500.svg"
+              alt="Workflow"
+              className="inline w-10 mr-2"
+            />
+            Travel Agency
+          </div>
           <div className="flex items-center space-x-4">
             <a
               href="/"
