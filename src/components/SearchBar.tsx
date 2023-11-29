@@ -9,8 +9,8 @@ const SearchBar = () => {
     travelers: 1,
   });
 
-  const [fromSuggestions, setFromSuggestions] = useState([]);
-  const [toSuggestions, setToSuggestions] = useState([]);
+  const [fromSuggestions, setFromSuggestions] = useState<string[]>([]);
+  const [toSuggestions, setToSuggestions] = useState<string[]>([]);
 
   const from_destinations = [
     'Albania',
@@ -28,8 +28,8 @@ const SearchBar = () => {
     // Add more destinations
   ];
 
-  const handleChange = ({ target }) => {
-    const { name, value } = target;
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
     setSearchParams({
       ...searchParams,
       [name]: value,
@@ -58,14 +58,14 @@ const SearchBar = () => {
     }
   };
 
-  const filterDestinations = (inputValue, destinations) => {
+  const filterDestinations = (inputValue: string, destinations: any[]) => {
     const inputValueLowerCase = inputValue.toLowerCase();
     return destinations.filter(
       (destination) => destination.toLowerCase().includes(inputValueLowerCase)
     );
   };
 
-  const handleSuggestionClick = (name, suggestion) => {
+  const handleSuggestionClick = (name: string, suggestion: string) => {
     setSearchParams({
       ...searchParams,
       [name]: suggestion,
@@ -78,7 +78,7 @@ const SearchBar = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     // Add your search functionality here using searchParams
     console.log('Search Parameters:', searchParams);

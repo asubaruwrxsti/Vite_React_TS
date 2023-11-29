@@ -1,5 +1,3 @@
-import React from 'react';
-
 const DestinationList = () => {
   const destinations = [
 	{ name: 'Paris', imageUrl: 'https://via.placeholder.com/300' },
