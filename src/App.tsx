@@ -28,7 +28,7 @@ const App = () => {
 				path="/login"
 				element={
 					isLoggedIn ? (
-					<Navigate to="/home" />
+					<Navigate to="/" />
 					) : (
 					<Login onLogin={() => setIsLoggedIn(true)} />
 					)
