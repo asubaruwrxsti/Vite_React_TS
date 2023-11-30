@@ -1,88 +1,95 @@
 import React, { useState } from 'react';
+import { paramState } from '../store';
+import { useRecoilState } from 'recoil';
+import { useNavigate } from 'react-router-dom';
 
 const SearchBar = () => {
-  const [searchParams, setSearchParams] = useState({
-    from: '',
-    to: '',
-    departDate: '',
-    returnDate: '',
-    travelers: 1,
-  });
 
-  const [fromSuggestions, setFromSuggestions] = useState<string[]>([]);
-  const [toSuggestions, setToSuggestions] = useState<string[]>([]);
+	const [text, setText] = useRecoilState(paramState);
+	const history = useNavigate();
 
-  const from_destinations = [
-    'Albania',
-    'Argentina',
-    'Australia',
-    'Austria',
-    // Add more destinations
-  ];
+	const handleSubmit = (e: { preventDefault: () => void; }) => {
+	  e.preventDefault();
+	  setText(JSON.stringify(searchParams));
+	  history('/checkout');
+	};
 
-  const to_destinations = [
-    'Paris',
-    'Tokyo',
-    'New York',
-    'London',
-    // Add more destinations
-  ];
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setSearchParams({
-      ...searchParams,
-      [name]: value,
-    });
-
-    // if the return date is before the depart date and the depart date is not empty
-	if (
-	  name === 'returnDate' &&
-	  new Date(value) < new Date(searchParams.departDate) &&
-	  searchParams.departDate !== ''
-	) {
-	  alert('Return date must be after depart date');
-	  setSearchParams({
-		...searchParams,
+	const [searchParams, setSearchParams] = useState({
+		from: '',
+		to: '',
+		departDate: '',
 		returnDate: '',
-	  });
-	}
+		travelers: 1,
+	});
 
-    // Update suggestions based on the current input value
-    if (name === 'from') {
-      const fromSuggestions = filterDestinations(value, from_destinations);
-      setFromSuggestions(fromSuggestions);
-    } else if (name === 'to') {
-      const toSuggestions = filterDestinations(value, to_destinations);
-      setToSuggestions(toSuggestions);
-    }
-  };
+	const [fromSuggestions, setFromSuggestions] = useState<string[]>([]);
+	const [toSuggestions, setToSuggestions] = useState<string[]>([]);
 
-  const filterDestinations = (inputValue: string, destinations: any[]) => {
-    const inputValueLowerCase = inputValue.toLowerCase();
-    return destinations.filter(
-      (destination) => destination.toLowerCase().includes(inputValueLowerCase)
-    );
-  };
+	const from_destinations = [
+		'Albania',
+		'Argentina',
+		'Australia',
+		'Austria',
+		// Add more destinations
+	];
 
-  const handleSuggestionClick = (name: string, suggestion: string) => {
-    setSearchParams({
-      ...searchParams,
-      [name]: suggestion,
-    });
+	const to_destinations = [
+		'Paris',
+		'Tokyo',
+		'New York',
+		'London',
+		// Add more destinations
+	];
 
-    if (name === 'from') {
-      setFromSuggestions([]);
-    } else if (name === 'to') {
-      setToSuggestions([]);
-    }
-  };
+	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		const { name, value } = event.target;
+		setSearchParams({
+		...searchParams,
+		[name]: value,
+		});
 
-  const handleSubmit = (e: { preventDefault: () => void; }) => {
-    e.preventDefault();
-    // Add your search functionality here using searchParams
-    console.log('Search Parameters:', searchParams);
-  };
+		// if the return date is before the depart date and the depart date is not empty
+		if (
+		name === 'returnDate' &&
+		new Date(value) < new Date(searchParams.departDate) &&
+		searchParams.departDate !== ''
+		) {
+		alert('Return date must be after depart date');
+		setSearchParams({
+			...searchParams,
+			returnDate: '',
+		});
+		}
+
+		// Update suggestions based on the current input value
+		if (name === 'from') {
+		const fromSuggestions = filterDestinations(value, from_destinations);
+		setFromSuggestions(fromSuggestions);
+		} else if (name === 'to') {
+		const toSuggestions = filterDestinations(value, to_destinations);
+		setToSuggestions(toSuggestions);
+		}
+	};
+
+	const filterDestinations = (inputValue: string, destinations: any[]) => {
+		const inputValueLowerCase = inputValue.toLowerCase();
+		return destinations.filter(
+		(destination) => destination.toLowerCase().includes(inputValueLowerCase)
+		);
+	};
+
+	const handleSuggestionClick = (name: string, suggestion: string) => {
+		setSearchParams({
+		...searchParams,
+		[name]: suggestion,
+		});
+
+		if (name === 'from') {
+		setFromSuggestions([]);
+		} else if (name === 'to') {
+		setToSuggestions([]);
+		}
+	};
 
   return (
     <div className="max-w-lg mx-auto mt-8 p-6 bg-white rounded-lg shadow-md relative">

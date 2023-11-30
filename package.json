@@ -11,9 +11,11 @@
   },
   "dependencies": {
     "@mui/base": "latest",
+    "@react-navigation/native": "^6.1.9",
     "react": "latest",
     "react-dom": "latest",
-    "react-router-dom": "^6.20.0"
+    "react-router-dom": "^6.20.0",
+    "recoil": "^0.7.7"
   },
   "devDependencies": {
     "@types/react": "latest",
