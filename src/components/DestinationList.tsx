@@ -20,7 +20,6 @@ const DestinationList = () => {
 						/>
 						<div className="absolute inset-0 flex items-center justify-center flex-col opacity-0 hover:opacity-100 transition-opacity duration-300">
 							<p className="text-white font-semibold text-lg mb-2">{destination.name}</p>
-							<button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-opacity">View</button>
 						</div>
 					</div>
 				))}

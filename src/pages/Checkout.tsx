@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { paramState } from '../store';
+import CarsList from '../components/CarsList';
+import HotelsList from '../components/HotelsList';
 
 const Checkout = () => {
 	// define the number of suggestions to display
@@ -43,7 +45,13 @@ const Checkout = () => {
 			returnDate: travelDetails.returnDate,
 			price: price,
 			seats: seats,
-			total: price * seats
+			total: price * seats,
+			carAccomodation: {
+				price: 0,
+			},
+			hotelAccomodation: {
+				price: 0,
+			},
 		};
 	});
 
@@ -175,6 +183,8 @@ const Checkout = () => {
 								<h2 className="text-xl font-bold mb-4">Total</h2>
 								<p id={"setPrice" + index} className="text-3xl font-bold text-blue-500">${flightData[index].total}</p>
 							</div>
+							<CarsList index={index} />
+							<HotelsList index={index} />
 
 							{/* Book now */}
 							<div className="flex flex-col items-center">
@@ -185,10 +195,30 @@ const Checkout = () => {
 										if (!Array.isArray(allFlightData)) {
 											allFlightData = [allFlightData];
 										}
+
+										// get the car accomodation value
+										let carElement = document.getElementById("car" + index) as HTMLInputElement;
+										if (carElement?.value === "Select a car") {
+											flightData[index].carAccomodation.price = 0;
+										} else {
+											flightData[index].carAccomodation.price = parseInt(carElement?.value);
+										}
+
+										// get the hotel accomodation value
+										let hotelElement = document.getElementById("hotel" + index) as HTMLInputElement;
+										if (hotelElement?.value === "Select a hotel") {
+											flightData[index].hotelAccomodation.price = 0;
+										} else {
+											flightData[index].hotelAccomodation.price = parseInt(hotelElement?.value);
+										}
+
+										// update the total price
+										flightData[index].total = flightData[index].total + flightData[index].carAccomodation.price + flightData[index].hotelAccomodation.price
+
 										allFlightData.push(flightData[index]);
 										localStorage.setItem('flightData', JSON.stringify(allFlightData));
 										alert('Flight booked successfully!');
-										navigate('/dashboard');
+										// navigate('/dashboard');
 									}}
 								>
 									Book Now

@@ -1,5 +1,17 @@
-const CarsList = () => {
-	const Cars = [
+import { useState } from 'react';
+
+interface Car {
+	carName: string;
+	carModel: string;
+	carPrice: string;
+}
+
+type CarsListProps = {
+	index : number;
+};
+
+const CarsList = ({index}: CarsListProps) => {
+	const Cars: Car[] = [
 		{
 			"carName": "Toyota",
 			"carModel": "Corolla",
@@ -17,18 +29,28 @@ const CarsList = () => {
 		}
 	];
 
+	const [selectedCar, setSelectedCar] = useState<number | null>(0);
+
+	const handleCarSelect = (index: number) => {
+		setSelectedCar(index);
+	};
+
 	return (
-		<div>
-			<h2>Pick a car option</h2>
-			<ul>
+		<div className="p-4">
+			<h2 className="text-2xl font-bold mb-4">Rental Option</h2>
+			<select
+				className="border rounded p-2"
+				value={selectedCar !== null ? selectedCar : undefined}
+				onChange={(e) => handleCarSelect(Number(e.target.value))}
+				id = {"car" + index}
+			>
+				<option>Select a car</option>
 				{Cars.map((car, index) => (
-					<li key={index}>
-						<h3>{car.carName}</h3>
-						<p>{car.carModel}</p>
-						<p>{car.carPrice}</p>
-					</li>
+					<option key={index} value={car.carPrice}>
+						{car.carName} - {car.carModel} (${car.carPrice})
+					</option>
 				))}
-			</ul>
+			</select>
 		</div>
 	);
 };

@@ -35,6 +35,10 @@ const Dashboard = () => {
 									</p>
 									<p className="text-gray-700">Total: ${flight.total}</p>
 								</div>
+								<div className="text-gray-700">
+									<p>Car Accomodation: ${flight.carAccomodation.price}</p>
+									<p>Hotel Accomodation: ${flight.hotelAccomodation.price}</p>
+								</div>
 								<div className="flex justify-end">
 									<button
 										onClick={() => {
