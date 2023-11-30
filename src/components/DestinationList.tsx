@@ -1,10 +1,9 @@
 const DestinationList = () => {
 	const destinations = [
-		{ name: 'Paris', imageUrl: 'https://via.placeholder.com/300' },
-		{ name: 'Tokyo', imageUrl: 'https://via.placeholder.com/300' },
-		{ name: 'New York', imageUrl: 'https://via.placeholder.com/300' },
-		{ name: 'London', imageUrl: 'https://via.placeholder.com/300' },
-		// Add more destinations with imageUrl
+		{ name: 'Paris', imageUrl: '/paris.jpg' },
+		{ name: 'Tokyo', imageUrl: '/tokyo.jpg' },
+		{ name: 'New York', imageUrl: '/newyork.jpg' },
+		{ name: 'London', imageUrl: '/london.jpg' },
 	];
 
 	return (
@@ -16,9 +15,10 @@ const DestinationList = () => {
 						<img
 							src={destination.imageUrl}
 							alt={`Image of ${destination.name}`}
-							className="w-full h-60 object-cover transition-transform transform hover:scale-105"
+							className="w-full h-60 object-cover transition duration-300 transform hover:scale-110"
 						/>
-						<div className="absolute inset-0 flex items-center justify-center flex-col opacity-0 hover:opacity-100 transition-opacity duration-300">
+						<div className="absolute inset-0 flex items-center justify-center flex-col opacity-0 hover:opacity-100 transition-opacity duration-300 bg-black bg-opacity-50">
+							{/* Added background color for better text visibility */}
 							<p className="text-white font-semibold text-lg mb-2">{destination.name}</p>
 						</div>
 					</div>
