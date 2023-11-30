@@ -27,7 +27,6 @@ const Checkout = () => {
 	}
 
 	let flightData = Array.from({ length: numberOfFlights }, () => {
-		console.log(travelDetails);
 		let price = generateRandomPrice();
 		let seats = travelDetails.travellers;
 		return {
