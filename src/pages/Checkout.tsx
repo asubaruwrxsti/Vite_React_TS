@@ -1,6 +1,4 @@
-import { useEffect } from 'react';
 import { useRecoilState } from 'recoil';
-import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { paramState } from '../store';
@@ -12,14 +10,7 @@ const Checkout = () => {
 	const numberOfFlights = 3;
 
 	const [text] = useRecoilState(paramState);
-	const navigate = useNavigate();
-	const travelDetails = JSON.parse(text);
-
-	useEffect(() => {
-		if (text === '') {
-			navigate('/');
-		}
-	}, [text, navigate]);
+	const travelDetails = text ? JSON.parse(text) : null;
 
 	function generateRandomTime() {
 		const hours = Math.floor(Math.random() * 24);
@@ -36,8 +27,9 @@ const Checkout = () => {
 	}
 
 	let flightData = Array.from({ length: numberOfFlights }, () => {
+		console.log(travelDetails);
 		let price = generateRandomPrice();
-		let seats = travelDetails.travelers;
+		let seats = travelDetails.travellers;
 		return {
 			from: travelDetails.from,
 			to: travelDetails.to,
