@@ -1,10 +1,15 @@
 import Footer from '../components/Footer';
 import Navbar from '../components/Navbar';
 
+/**
+ * The Dashboard page
+ * Displays the booked flights
+ */
+
 const Dashboard = () => {
-	// get booked flights from local storage
+	// Get the flight data from localStorage
 	let flightData = JSON.parse(localStorage.getItem('flightData') || '[]');
-	// convert flghtData to an array if it is not
+	// Convert the flight data to an array (it is an object if there is only one flight)
 	if (!Array.isArray(flightData)) {
 		flightData = [flightData];
 	}
@@ -12,11 +17,13 @@ const Dashboard = () => {
 	return (
 		<div>
 			<Navbar />
+			{/*  Transform the flight data into a list of booked flights */}
 			{flightData.length > 0 ? (
 				<div className="container mx-auto p-4">
 					<h1 className="text-2xl font-bold mb-4">Your Booked Flights</h1>
 					<div className="grid grid-cols-3 gap-4">
 						{flightData.map((flight: any, index: number) => (
+							// Display the flight details
 							<div
 								key={index}
 								className="bg-blue-100 p-4 rounded flex flex-col justify-between"
@@ -39,9 +46,11 @@ const Dashboard = () => {
 									<p>Car Accomodation: ${flight.carAccomodation.price}</p>
 									<p>Hotel Accomodation: ${flight.hotelAccomodation.price}</p>
 								</div>
+								{/* Cancel Flight button */}
 								<div className="flex justify-end">
 									<button
 										onClick={() => {
+											// Remove the flight from localStorage, then reload the page
 											let flightData = JSON.parse(
 												localStorage.getItem('flightData') || '[]'
 											);
@@ -51,7 +60,7 @@ const Dashboard = () => {
 												JSON.stringify(flightData)
 											);
 											alert('Flight cancelled successfully');
-											window.location.reload();
+											history.go(0);
 										}}
 										className="bg-red-500 text-white px-4 py-2 rounded focus:outline-none hover:bg-red-600 transition duration-300"
 									>

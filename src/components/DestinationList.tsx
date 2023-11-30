@@ -1,4 +1,10 @@
+/**
+ * DestinationList component
+ * Displays the list of destinations
+ */
 const DestinationList = () => {
+	// Dummy data, normally this would be fetched from a backend
+	// The images are saved in the public folder
 	const destinations = [
 		{ name: 'Paris', imageUrl: '/paris.jpg' },
 		{ name: 'Tokyo', imageUrl: '/tokyo.jpg' },
@@ -10,6 +16,7 @@ const DestinationList = () => {
 		<div className="max-w-screen-md mx-auto mt-8 p-4">
 			<h2 className="text-2xl font-semibold mb-4">Popular Destinations</h2>
 			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+				{/* Display the destination information using the map function */}
 				{destinations.map((destination, index) => (
 					<div key={index} className="relative overflow-hidden bg-white rounded shadow-lg">
 						<img

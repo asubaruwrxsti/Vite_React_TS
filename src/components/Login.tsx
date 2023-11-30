@@ -5,11 +5,21 @@ type LoginProps = {
 	onLogin: () => void;
 };
 
+/**
+ * The Login component
+ * Displays the login form
+ */
+
 const Login = ({ onLogin }: LoginProps) => {
+	// Define the username and password
+	// Use state to store the username and password
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
 
+	// Handle the login
 	const handleLogin = () => {
+		// If the username and password are present, set the isLoggedIn flag to true
+		// Normally, this would be done by making a call to the backend
 		if (username && password) {
 			localStorage.setItem('isLoggedIn', 'true');
 			onLogin();

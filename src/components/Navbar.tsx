@@ -1,14 +1,21 @@
-function handleLogout(): void {
-	localStorage.removeItem('isLoggedIn');
-	localStorage.removeItem('flightData');
-	window.location.reload();
-}
-
-function isLoggedIn(): boolean {
-	return localStorage.getItem('isLoggedIn') === 'true';
-}
+/**
+ * The Navbar component
+ * Displays the navbar
+ */
 
 const Navbar = () => {
+	//  Function to handle logout
+	function handleLogout(): void {
+		localStorage.removeItem('isLoggedIn');
+		localStorage.removeItem('flightData');
+		window.location.reload();
+	}
+
+	// Check if the user is logged in
+	function isLoggedIn(): boolean {
+		return localStorage.getItem('isLoggedIn') === 'true';
+	}
+
 	return (
 		<>
 			<nav className="bg-gray-800 p-4">

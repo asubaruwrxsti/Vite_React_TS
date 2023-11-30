@@ -6,6 +6,11 @@ import Login from './components/Login';
 import Checkout from './pages/Checkout';
 import { RecoilRoot } from 'recoil';
 
+/**
+ * The main App component
+ * Handles routing
+ */
+
 const App = () => {
 	const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('isLoggedIn') === 'true');
 
