@@ -16,22 +16,21 @@ const CarsList = () => {
 			"carPrice": "30"
 		}
 	];
-  
+
 	return (
-	  <div>
-		<h2>Pick a car option</h2>
-		<ul>
-			{Cars.map((car, index) => (
-				<li key={index}>
-					<h3>{car.carName}</h3>
-					<p>{car.carModel}</p>
-					<p>{car.carPrice}</p>
-				</li>
-			))}
-		</ul>
+		<div>
+			<h2>Pick a car option</h2>
+			<ul>
+				{Cars.map((car, index) => (
+					<li key={index}>
+						<h3>{car.carName}</h3>
+						<p>{car.carModel}</p>
+						<p>{car.carPrice}</p>
+					</li>
+				))}
+			</ul>
 		</div>
 	);
-  };
-  
-  export default CarsList;
-  
+};
+
+export default CarsList;

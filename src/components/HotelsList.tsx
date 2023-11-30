@@ -16,22 +16,21 @@ const HotelsList = () => {
 			"hotelPrice": "300",
 		},
 	];
-  
+
 	return (
-	  <div>
-		<h2>Pick a hotel option</h2>
-		<ul>
-			{Hotels.map((hotel, index) => (
-				<li key={index}>
-					<h3>{hotel.hotelName}</h3>
-					<p>{hotel.hotelAddress}</p>
-					<p>{hotel.hotelPrice}</p>
-				</li>
-			))}
-		</ul>
-	  </div>
+		<div>
+			<h2>Pick a hotel option</h2>
+			<ul>
+				{Hotels.map((hotel, index) => (
+					<li key={index}>
+						<h3>{hotel.hotelName}</h3>
+						<p>{hotel.hotelAddress}</p>
+						<p>{hotel.hotelPrice}</p>
+					</li>
+				))}
+			</ul>
+		</div>
 	);
-  };
-  
-  export default HotelsList;
-  
+};
+
+export default HotelsList;

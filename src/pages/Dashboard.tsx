@@ -4,7 +4,7 @@ import Navbar from '../components/Navbar';
 const Dashboard = () => {
 	// get booked flights from local storage
 	const flightData = localStorage.getItem('flightData');
-	
+
 	return (
 		<div>
 			<Navbar />
