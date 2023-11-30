@@ -10,6 +10,24 @@ const SearchBar = () => {
 
 	const handleSubmit = (e: { preventDefault: () => void; }) => {
 	  e.preventDefault();
+	  // if not all fields are filled out, alert the user
+	  if (
+		searchParams.from === '' ||
+		searchParams.to === '' ||
+		searchParams.departDate === '' ||
+		searchParams.returnDate === '' ||
+		searchParams.travelers === 0
+	  ) {
+		alert('Please fill out all fields');
+		return;
+	  }
+
+	  // if the user is not logged in, redirect to login page
+	  if (!localStorage.getItem('isLoggedIn')) {
+		history('/login');
+		return;
+	  }
+
 	  setText(JSON.stringify(searchParams));
 	  history('/checkout');
 	};
