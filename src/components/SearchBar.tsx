@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 const SearchBar = () => {
 
-	const [text, setText] = useRecoilState(paramState);
+	const [, setText] = useRecoilState(paramState);
 	const history = useNavigate();
 
 	const handleSubmit = (e: { preventDefault: () => void; }) => {

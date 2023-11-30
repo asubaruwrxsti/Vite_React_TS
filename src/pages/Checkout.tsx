@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 
 const Checkout = () => {
-    const [text, setText] = useRecoilState(paramState);
+    const [text] = useRecoilState(paramState);
     const navigate = useNavigate();
 
     useEffect(() => {
