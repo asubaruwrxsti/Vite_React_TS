@@ -1,5 +1,5 @@
 ## React + Vite + TS
 ```bash
-npm init
+npm install
 npm run dev
 ```
