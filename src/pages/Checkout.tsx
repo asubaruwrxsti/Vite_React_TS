@@ -37,6 +37,10 @@ const Checkout = () => {
 		let price = generateRandomPrice();
 		let seats = travelDetails.travelers;
 		return {
+			from: travelDetails.from,
+			to: travelDetails.to,
+			departDate: travelDetails.departDate,
+			returnDate: travelDetails.returnDate,
 			price: price,
 			seats: seats,
 			total: price * seats
@@ -176,7 +180,13 @@ const Checkout = () => {
 							<div className="flex flex-col items-center">
 								<button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mt-3 rounded focus:outline-none focus:shadow-outline"
 									onClick={() => {
-										localStorage.setItem('flightData', JSON.stringify(flightData[index], travelDetails));
+										// append the flight data to the flightData array
+										let allFlightData = JSON.parse(localStorage.getItem('flightData') || '[]');
+										if (!Array.isArray(allFlightData)) {
+											allFlightData = [allFlightData];
+										}
+										allFlightData.push(flightData[index]);
+										localStorage.setItem('flightData', JSON.stringify(allFlightData));
 										alert('Flight booked successfully!');
 										navigate('/dashboard');
 									}}
