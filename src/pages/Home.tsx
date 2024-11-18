@@ -13,8 +13,10 @@ const Home = () => {
 		<div>
 			<Navbar />
 			<h1 className="text-3xl text-center mt-10">Welcome to our Travel Agency</h1>
-			<SearchBar />
-			<DestinationList />
+			<div className="flex">
+				<SearchBar />
+				<DestinationList />
+			</div>
 			<div className="h-20"></div>
 			<Footer />
 		</div>
