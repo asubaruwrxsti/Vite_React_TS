@@ -5,6 +5,7 @@ import { paramState } from '../store';
 import CarsList from '../components/CarsList';
 import HotelsList from '../components/HotelsList';
 import { useNavigate } from 'react-router-dom';
+import { useAlert } from '@/hooks/useAlert';
 
 /**
  * The Checkout page
@@ -12,6 +13,8 @@ import { useNavigate } from 'react-router-dom';
  */
 
 const Checkout = () => {
+	const { showAlert } = useAlert();
+
 	// Define the number of flights to display
 	const numberOfFlights = 3;
 
@@ -235,7 +238,7 @@ const Checkout = () => {
 										localStorage.setItem('flightData', JSON.stringify(allFlightData));
 
 										// Alert the user and redirect to the dashboard
-										alert('Flight booked successfully!');
+										showAlert('Success', 'Your flight has been booked');
 										history('/dashboard');
 									}}
 								>

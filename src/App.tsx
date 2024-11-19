@@ -5,6 +5,7 @@ import Dashboard from './pages/Dashboard';
 import Login from './components/Login';
 import Checkout from './pages/Checkout';
 import { RecoilRoot } from 'recoil';
+import { AlertProvider } from './contexts/AlertContext';
 
 /**
  * The main App component
@@ -16,41 +17,43 @@ const App = () => {
 
 	return (
 		<RecoilRoot>
-			<Router>
-				<Routes>
-					<Route path="/" element={<Home />} />
-					<Route
-						path="/dashboard"
-						element={
-							isLoggedIn ? (
-								<Dashboard />
-							) : (
-								<Navigate to="/login" />
-							)
-						}
-					/>
-					<Route
-						path="/login"
-						element={
-							isLoggedIn ? (
-								<Navigate to="/" />
-							) : (
-								<Login onLogin={() => setIsLoggedIn(true)} />
-							)
-						}
-					/>
-					<Route
-						path="/checkout"
-						element={
-							isLoggedIn ? (
-								<Checkout />
-							) : (
-								<Navigate to="/" />
-							)
-						}
-					/>
-				</Routes>
-			</Router>
+			<AlertProvider>
+				<Router>
+					<Routes>
+						<Route path="/" element={<Home />} />
+						<Route
+							path="/dashboard"
+							element={
+								isLoggedIn ? (
+									<Dashboard />
+								) : (
+									<Navigate to="/login" />
+								)
+							}
+						/>
+						<Route
+							path="/login"
+							element={
+								isLoggedIn ? (
+									<Navigate to="/" />
+								) : (
+									<Login onLogin={() => setIsLoggedIn(true)} />
+								)
+							}
+						/>
+						<Route
+							path="/checkout"
+							element={
+								isLoggedIn ? (
+									<Checkout />
+								) : (
+									<Navigate to="/" />
+								)
+							}
+						/>
+					</Routes>
+				</Router>
+			</AlertProvider>
 		</RecoilRoot>
 	);
 };

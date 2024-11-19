@@ -1,5 +1,7 @@
 import Footer from '../components/Footer';
 import Navbar from '../components/Navbar';
+import { useAlert } from '@/hooks/useAlert';
+import { useNavigate } from 'react-router-dom';
 
 /**
  * The Dashboard page
@@ -7,6 +9,9 @@ import Navbar from '../components/Navbar';
  */
 
 const Dashboard = () => {
+	const { showAlert } = useAlert();
+	const history = useNavigate();
+
 	// Get the flight data from localStorage
 	let flightData = JSON.parse(localStorage.getItem('flightData') || '[]');
 	// Convert the flight data to an array (it is an object if there is only one flight)
@@ -59,8 +64,8 @@ const Dashboard = () => {
 												'flightData',
 												JSON.stringify(flightData)
 											);
-											alert('Flight cancelled successfully');
-											history.go(0);
+											showAlert('Success', 'Flight Cancelled');
+											history("/");
 										}}
 										className="bg-red-500 text-white px-4 py-2 rounded focus:outline-none hover:bg-red-600 transition duration-300"
 									>

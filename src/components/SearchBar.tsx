@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { paramState } from '../store';
 import { useRecoilState } from 'recoil';
 import { useNavigate } from 'react-router-dom';
+import { useAlert } from '@/hooks/useAlert';
 
 /**
  * The SearchBar component
@@ -15,6 +16,8 @@ const SearchBar = () => {
 	const [, setText] = useRecoilState(paramState);
 	const history = useNavigate();
 
+	const { showAlert } = useAlert();
+
 	// Handle the form submit
 	const handleSubmit = (e: { preventDefault: () => void; }) => {
 		e.preventDefault();
@@ -26,7 +29,7 @@ const SearchBar = () => {
 			searchParams.returnDate === '' ||
 			searchParams.travelers === 0
 		) {
-			alert('Please fill out all fields');
+			showAlert('Error', 'Please fill out all fields');
 			return;
 		}
 
@@ -85,7 +88,7 @@ const SearchBar = () => {
 			new Date(value) < new Date(searchParams.departDate) &&
 			searchParams.departDate !== ''
 		) {
-			alert('Return date must be after depart date');
+			showAlert('Error', 'Return date cannot be before the depart date');
 			setSearchParams({
 				...searchParams,
 				returnDate: '',

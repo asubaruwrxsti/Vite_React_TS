@@ -38,27 +38,33 @@ const Navbar = () => {
 	return (
 		<nav
 			className={`${isScrolled ? 'bg-gray-800 bg-opacity-50 p-4' : 'bg-gray-800 bg-opacity-80 p-6 h-24'
-				} sticky top-0 z-50 backdrop-blur-md transition-all duration-500 shadow-md`}
+				} sticky top-0 z-50 backdrop-blur-md transition-all duration-500 shadow-md flex justify-between items-center`}
 		>
 			<div className="container mx-auto flex justify-between items-center">
-				<div className={`text-white font-bold transition-all duration-300 ${isScrolled ? 'text-xl' : 'text-2xl'}`}>
+				{/* Logo section */}
+				<div className={`flex items-center text-white font-bold transition-all duration-300 ${isScrolled ? 'text-xl' : 'text-2xl'
+					}`}>
 					<img
 						src="/workflow-mark-indigo-500.svg"
 						alt="Workflow"
-						className="inline w-10 mr-2"
+						className="w-10 mr-2"
 					/>
-					Travel Agency
+					<span>Travel Agency</span>
 				</div>
-				<div className="flex items-center space-x-4">
+
+				{/* Navigation links */}
+				<div className="flex items-center space-x-6">
 					<a
 						href="/"
-						className={`text-white hover:text-gray-300 transition-all duration-300 ${isScrolled ? 'text-base' : 'text-lg'}`}
+						className={`text-white hover:text-gray-300 transition-all duration-300 ${isScrolled ? 'text-base' : 'text-lg'
+							}`}
 					>
 						Home
 					</a>
 					<a
 						href="/dashboard"
-						className={`text-white hover:text-gray-300 transition-all duration-300 ${isScrolled ? 'text-base' : 'text-lg'}`}
+						className={`text-white hover:text-gray-300 transition-all duration-300 ${isScrolled ? 'text-base' : 'text-lg'
+							}`}
 					>
 						Dashboard
 					</a>
