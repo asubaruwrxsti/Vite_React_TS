@@ -1,4 +1,4 @@
-import Navbar from './Navbar';
+import Navbar from './layout/Navbar';
 import { useAlert } from '@/hooks/useAlert';
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -20,8 +20,10 @@ import { Input } from "@/components/ui/input"
  */
 
 const Login = () => {
+	// useAlert hook to show alerts
 	const { showAlert } = useAlert();
 
+	// Define the form schema
 	const formSchema = z.object({
 		username: z.string().min(2, {
 			message: "Username must be at least 2 characters.",
@@ -31,6 +33,7 @@ const Login = () => {
 		}),
 	})
 
+	// Define the form resolver
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -39,8 +42,9 @@ const Login = () => {
 		},
 	})
 
+	// Handle the form submit
 	function handleLogin(values: z.infer<typeof formSchema>) {
-		console.log(values)
+		showAlert('Login', `Username: ${values.username}, Password: ${values.password}`);
 	};
 
 	return (

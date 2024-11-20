@@ -1,6 +1,6 @@
-import DestinationList from '../components/DestinationList';
-import Footer from '../components/Footer';
-import Navbar from '../components/Navbar';
+import DestinationList from '../components/lists/DestinationList';
+import Footer from '../components/layout/Footer';
+import Navbar from '../components/layout/Navbar';
 import SearchBar from '../components/SearchBar';
 
 /**

@@ -1,9 +1,9 @@
 import { useRecoilState } from 'recoil';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
+import Navbar from '../components/layout/Navbar';
+import Footer from '../components/layout/Footer';
 import { paramState } from '../store';
-import CarsList from '../components/CarsList';
-import HotelsList from '../components/HotelsList';
+import CarsList from '../components/lists/CarsList';
+import HotelsList from '../components/lists/HotelsList';
 import { useNavigate } from 'react-router-dom';
 import { useAlert } from '@/hooks/useAlert';
 

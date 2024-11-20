@@ -1,251 +1,253 @@
-import React, { useState } from 'react';
-import { paramState } from '../store';
+// SearchBar.tsx
+import { useDestinations } from '@/hooks/useDestinations';
+import { useState } from 'react';
 import { useRecoilState } from 'recoil';
-import { useNavigate } from 'react-router-dom';
-import { useAlert } from '@/hooks/useAlert';
-
-/**
- * The SearchBar component
- * Displays the search bar
- * Uses Recoil to store the search parameters
- */
+import { travelDetailsState } from '@/store';
+import { filterDestinations } from '@/lib/SearchBarUtils';
+import { Destination } from '@/types/types';
+import { z } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { Button } from "@/components/ui/button"
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { formatDateForInput, parseInputDate } from '@/lib/utils';
 
 const SearchBar = () => {
+	// API-related hooks
+	const { destinations, loading, error } = useDestinations();
+	const [travelDetails, setTravelDetails] = useRecoilState(travelDetailsState);
 
-	// Use recoil state to store the search parameters
-	const [, setText] = useRecoilState(paramState);
-	const history = useNavigate();
+	// Suggestion-related state
+	const [fromSuggestions, setFromSuggestions] = useState<Destination[]>([]);
+	const [toSuggestions, setToSuggestions] = useState<Destination[]>([]);
+	const [showFromSuggestions, setShowFromSuggestions] = useState(false);
+	const [showToSuggestions, setShowToSuggestions] = useState(false);
 
-	const { showAlert } = useAlert();
-
-	// Handle the form submit
-	const handleSubmit = (e: { preventDefault: () => void; }) => {
-		e.preventDefault();
-		// If not all fields are filled out, alert the user
-		if (
-			searchParams.from === '' ||
-			searchParams.to === '' ||
-			searchParams.departDate === '' ||
-			searchParams.returnDate === '' ||
-			searchParams.travelers === 0
-		) {
-			showAlert('Error', 'Please fill out all fields');
-			return;
-		}
-
-		// If the user is not logged in, redirect to login page
-		if (!localStorage.getItem('isLoggedIn')) {
-			history('/login');
-			return;
-		}
-
-		// Set the search parameters in the Recoil state and redirect to checkout page
-		setText(JSON.stringify(searchParams));
-		history('/checkout');
-	};
-
-	// Define the search parameters
-	const [searchParams, setSearchParams] = useState({
-		from: '',
-		to: '',
-		departDate: '',
-		returnDate: '',
-		travelers: 1,
+	// Form schema and validation
+	const formSchema = z.object({
+		from: z.string().min(1, {
+			message: "From must be at least 1 character.",
+		}),
+		to: z.string().min(1, {
+			message: "To must be at least 1 character.",
+		}),
+		departDate: z.date().min(new Date(), {
+			message: "Departure date must be in the future.",
+		}),
+		returnDate: z.date(),
+		passengers: z.number().int().min(1, {
+			message: "At least 1 passenger is required",
+		}).max(10, {
+			message: "Maximum of 10 passengers allowed",
+		}),
+	}).refine((data) => {
+		if (!data.departDate || !data.returnDate) return true;
+		return data.returnDate >= data.departDate;
+	}, {
+		message: "Return date must be after departure date",
+		path: ["returnDate"],
 	});
 
-	// Define the suggestions
-	const [fromSuggestions, setFromSuggestions] = useState<string[]>([]);
-	const [toSuggestions, setToSuggestions] = useState<string[]>([]);
+	// Form initialization
+	const form = useForm<z.infer<typeof formSchema>>({
+		resolver: zodResolver(formSchema),
+		defaultValues: {
+			from: travelDetails.from,
+			to: travelDetails.to,
+			departDate: new Date(),
+			returnDate: new Date(),
+			passengers: 1,
+		},
+	});
 
-	// Define the destinations
-	const from_destinations = [
-		'Albania',
-		'Argentina',
-		'Australia',
-		'Austria',
-	];
-
-	const to_destinations = [
-		'Paris',
-		'Tokyo',
-		'New York',
-		'London',
-	];
-
-	// Handle the input changes
-	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-
-		// Assign the input value to the corresponding search parameter
-		const { name, value } = event.target;
-		setSearchParams({
-			...searchParams,
-			[name]: value,
+	// Form submission handler
+	function handleTravelSubmit(values: z.infer<typeof formSchema>) {
+		setTravelDetails({
+			...travelDetails,
+			from: values.from,
+			to: values.to,
 		});
+		console.log(values);
+	}
 
-		// Check if the return date is before the depart date and the depart date is not empty
-		if (
-			name === 'returnDate' &&
-			new Date(value) < new Date(searchParams.departDate) &&
-			searchParams.departDate !== ''
-		) {
-			showAlert('Error', 'Return date cannot be before the depart date');
-			setSearchParams({
-				...searchParams,
-				returnDate: '',
-			});
-		}
-
-		// Update suggestions based on the current input value
-		if (name === 'from') {
-			const fromSuggestions = filterDestinations(value, from_destinations);
-			setFromSuggestions(fromSuggestions);
-		} else if (name === 'to') {
-			const toSuggestions = filterDestinations(value, to_destinations);
-			setToSuggestions(toSuggestions);
-		}
-	};
-
-	// Filter the destinations based on the input value
-	const filterDestinations = (inputValue: string, destinations: any[]) => {
-		const inputValueLowerCase = inputValue.toLowerCase();
-		return destinations.filter(
-			(destination) => destination.toLowerCase().includes(inputValueLowerCase)
-		);
-	};
-
-	// Handle the suggestion click
-	const handleSuggestionClick = (name: string, suggestion: string) => {
-
-		// Assign the suggestion to the corresponding search parameter
-		setSearchParams({
-			...searchParams,
-			[name]: suggestion,
-		});
-
-		// Clear the suggestions
-		if (name === 'from') {
-			setFromSuggestions([]);
-		} else if (name === 'to') {
-			setToSuggestions([]);
-		}
-	};
+	// Loading states
+	if (loading) return <div>Loading destinations...</div>;
+	if (error) return <div>Error loading destinations: {error.message}</div>;
 
 	return (
-		<div className="max-w-lg mx-auto mt-8 p-6 bg-white rounded-lg shadow-md relative">
-			<h2 className="text-3xl font-semibold mb-4 text-center text-gray-800">
-				Search Flights
-			</h2>
-			{/* Search Form */}
-			<form onSubmit={handleSubmit} className="space-y-4">
-				<div className="flex items-center justify-between space-x-4">
-					<div className="w-1/2 relative">
-						<label htmlFor="from" className="block text-sm text-gray-600">
-							From
-						</label>
-						<input
-							type="text"
-							id="from"
+		<Form {...form}>
+			<form onSubmit={form.handleSubmit(handleTravelSubmit)} className="space-y-8 w-full max-w-md">
+				<div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col">
+
+					{/* From field */}
+					<div className='col-span-6'>
+						<FormField
+							control={form.control}
 							name="from"
-							value={searchParams.from}
-							onChange={handleChange}
-							className="w-full py-2 px-4 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>From</FormLabel>
+									<FormControl>
+										<Input
+											placeholder="From"
+											{...field}
+											onChange={(e) => {
+												field.onChange(e);
+												if (e.target.value.trim()) {
+													setFromSuggestions(filterDestinations(e.target.value, destinations));
+													setShowFromSuggestions(true);
+												} else {
+													setShowFromSuggestions(false);
+												}
+											}}
+										/>
+									</FormControl>
+									<FormMessage />
+									{showFromSuggestions && fromSuggestions.length > 0 && field.value && (
+										<ul className="absolute z-10 bg-white shadow-lg rounded-b border">
+											{fromSuggestions.map((suggestion) => (
+												<li
+													key={`${suggestion.code}-from`}
+													className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+													onClick={() => {
+														field.onChange(suggestion.name);
+														setShowFromSuggestions(false);
+													}}
+												>
+													{suggestion.name}
+												</li>
+											))}
+										</ul>
+									)}
+								</FormItem>
+							)}
 						/>
-						{/* Handle the suggestion display for the From field */}
-						{fromSuggestions.length > 0 && (
-							<ul className="mt-2 absolute left-0 right-0 border border-gray-300 rounded shadow-md" style={{ backgroundColor: 'white' }}>
-								{fromSuggestions.map((suggestion) => (
-									<li
-										key={suggestion}
-										className="px-4 py-2 cursor-pointer hover:bg-gray-100"
-										onClick={() => handleSuggestionClick('from', suggestion)}
-									>
-										{suggestion}
-									</li>
-								))}
-							</ul>
-						)}
 					</div>
-					<div className="w-1/2 relative">
-						<label htmlFor="to" className="block text-sm text-gray-600">
-							To
-						</label>
-						<input
-							type="text"
-							id="to"
+
+					{/* To field */}
+					<div className='col-span-6'>
+						<FormField
+							control={form.control}
 							name="to"
-							value={searchParams.to}
-							onChange={handleChange}
-							className="w-full py-2 px-4 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>To</FormLabel>
+									<FormControl>
+										<Input
+											placeholder="To"
+											{...field}
+											onChange={(e) => {
+												field.onChange(e);
+												if (e.target.value.trim()) {
+													setToSuggestions(filterDestinations(e.target.value, destinations));
+													setShowToSuggestions(true);
+												} else {
+													setShowToSuggestions(false);
+												}
+											}}
+										/>
+									</FormControl>
+									<FormMessage />
+									{showToSuggestions && toSuggestions.length > 0 && field.value && (
+										<ul className="absolute z-10 bg-white shadow-lg rounded-b border">
+											{toSuggestions.map((suggestion) => (
+												<li
+													key={`${suggestion.code}-to`}
+													className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+													onClick={() => {
+														field.onChange(suggestion.name);
+														setShowToSuggestions(false);
+													}}
+												>
+													{suggestion.name}
+												</li>
+											))}
+										</ul>
+									)}
+								</FormItem>
+							)}
 						/>
-						{/* Handle the suggestion display for the To field */}
-						{toSuggestions.length > 0 && (
-							<ul className="mt-2 absolute left-0 right-0 border border-gray-300 rounded shadow-md" style={{ backgroundColor: 'white' }}>
-								{toSuggestions.map((suggestion) => (
-									<li
-										key={suggestion}
-										className="px-4 py-2 cursor-pointer hover:bg-gray-100"
-										onClick={() => handleSuggestionClick('to', suggestion)}
-									>
-										{suggestion}
-									</li>
-								))}
-							</ul>
-						)}
 					</div>
-				</div>
-				<div className="flex items-center justify-between space-x-4">
-					<div className="w-1/2">
-						{/* Depart Date */}
-						<label htmlFor="departDate" className="block text-sm text-gray-600">
-							Depart Date
-						</label>
-						<input
-							type="date"
-							id="departDate"
+
+					{/* Departure date field */}
+					<div className='col-span-6'>
+						<FormField
+							control={form.control}
 							name="departDate"
-							value={searchParams.departDate}
-							onChange={handleChange}
-							className="w-full py-2 px-4 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Departure Date</FormLabel>
+									<FormControl>
+										<Input
+											type="date"
+											{...field}
+											value={field.value ? formatDateForInput(field.value) : ''}
+											onChange={(e) => field.onChange(parseInputDate(e.target.value))}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
 						/>
 					</div>
-					<div className="w-1/2">
-						{/* Return Date */}
-						<label htmlFor="returnDate" className="block text-sm text-gray-600">
-							Return Date
-						</label>
-						<input
-							type="date"
-							id="returnDate"
+
+					{/* Return date field */}
+					<div className='col-span-6'>
+						<FormField
+							control={form.control}
 							name="returnDate"
-							value={searchParams.returnDate}
-							onChange={handleChange}
-							className="w-full py-2 px-4 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Return Date</FormLabel>
+									<FormControl>
+										<Input
+											type="date"
+											{...field}
+											value={field.value ? formatDateForInput(field.value) : ''}
+											onChange={(e) => field.onChange(parseInputDate(e.target.value))}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
 						/>
 					</div>
+
+					{/* Passengers field */}
+					<div className='col-span-6'>
+						<FormField
+							control={form.control}
+							name="passengers"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Passengers</FormLabel>
+									<FormControl>
+										<Input type="number" placeholder="Passengers" {...field} />
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+					</div>
+
+					{/* Submit button */}
+					<Button
+						type="submit"
+						className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mt-3 rounded focus:outline-none focus:shadow-outline'
+					>
+						Submit
+					</Button>
 				</div>
-				<div>
-					{/* Number of Travelers */}
-					<label htmlFor="travelers" className="block text-sm text-gray-600">
-						Travelers
-					</label>
-					<input
-						type="number"
-						id="travelers"
-						name="travelers"
-						value={searchParams.travelers}
-						onChange={handleChange}
-						className="w-full py-2 px-4 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-					/>
-				</div>
-				{/* Form Submit */}
-				<button
-					type="submit"
-					className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition-colors"
-				>
-					Search
-				</button>
 			</form>
-		</div>
+		</Form>
 	);
 };
 
