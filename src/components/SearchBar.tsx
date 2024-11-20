@@ -43,7 +43,7 @@ const SearchBar = () => {
 			message: "Departure date must be in the future.",
 		}),
 		returnDate: z.date(),
-		passengers: z.number().int().min(1, {
+		travelers: z.number().int().min(1, {
 			message: "At least 1 passenger is required",
 		}).max(10, {
 			message: "Maximum of 10 passengers allowed",
@@ -64,7 +64,7 @@ const SearchBar = () => {
 			to: travelDetails.to,
 			departDate: new Date(),
 			returnDate: new Date(),
-			passengers: 1,
+			travelers: 1,
 		},
 	});
 
@@ -221,16 +221,16 @@ const SearchBar = () => {
 						/>
 					</div>
 
-					{/* Passengers field */}
+					{/* Travelers field */}
 					<div className='col-span-6'>
 						<FormField
 							control={form.control}
-							name="passengers"
+							name="travelers"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Passengers</FormLabel>
+									<FormLabel>Travelers</FormLabel>
 									<FormControl>
-										<Input type="number" placeholder="Passengers" {...field} />
+										<Input type="number" placeholder="Travelers" {...field} />
 									</FormControl>
 									<FormMessage />
 								</FormItem>
