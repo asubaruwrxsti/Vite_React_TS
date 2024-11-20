@@ -83,171 +83,176 @@ const SearchBar = () => {
 	if (error) return <div>Error loading destinations: {error.message}</div>;
 
 	return (
-		<Form {...form}>
-			<form onSubmit={form.handleSubmit(handleTravelSubmit)} className="space-y-8 w-full max-w-md">
-				<div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col">
+		<>
+			<div className="flex flex-col items-center justify-center w-full p-4 md:p-6">
+				<h2 className="text-xl md:text-2xl font-semibold mb-4">Make a reservation</h2>
+				<Form {...form}>
+					<form onSubmit={form.handleSubmit(handleTravelSubmit)} className="w-full max-w-[95%] md:max-w-md">
+						<div className="bg-white shadow-xl rounded-xl flex flex-col p-4 md:p-8 space-y-4">
 
-					{/* From field */}
-					<div className='col-span-6'>
-						<FormField
-							control={form.control}
-							name="from"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>From</FormLabel>
-									<FormControl>
-										<Input
-											placeholder="From"
-											{...field}
-											onChange={(e) => {
-												field.onChange(e);
-												if (e.target.value.trim()) {
-													setFromSuggestions(filterDestinations(e.target.value, destinations));
-													setShowFromSuggestions(true);
-												} else {
-													setShowFromSuggestions(false);
-												}
-											}}
-										/>
-									</FormControl>
-									<FormMessage />
-									{showFromSuggestions && fromSuggestions.length > 0 && field.value && (
-										<ul className="absolute z-10 bg-white shadow-lg rounded-b border">
-											{fromSuggestions.map((suggestion) => (
-												<li
-													key={`${suggestion.code}-from`}
-													className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-													onClick={() => {
-														field.onChange(suggestion.name);
-														setShowFromSuggestions(false);
+							{/* From field */}
+							<div className='w-full'>
+								<FormField
+									control={form.control}
+									name="from"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>From</FormLabel>
+											<FormControl>
+												<Input
+													placeholder="From"
+													{...field}
+													onChange={(e) => {
+														field.onChange(e);
+														if (e.target.value.trim()) {
+															setFromSuggestions(filterDestinations(e.target.value, destinations));
+															setShowFromSuggestions(true);
+														} else {
+															setShowFromSuggestions(false);
+														}
 													}}
-												>
-													{suggestion.name}
-												</li>
-											))}
-										</ul>
+												/>
+											</FormControl>
+											<FormMessage />
+											{showFromSuggestions && fromSuggestions.length > 0 && field.value && (
+												<ul className="absolute z-10 bg-white shadow-lg rounded-b border">
+													{fromSuggestions.map((suggestion) => (
+														<li
+															key={`${suggestion.code}-from`}
+															className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+															onClick={() => {
+																field.onChange(suggestion.name);
+																setShowFromSuggestions(false);
+															}}
+														>
+															{suggestion.name}
+														</li>
+													))}
+												</ul>
+											)}
+										</FormItem>
 									)}
-								</FormItem>
-							)}
-						/>
-					</div>
+								/>
+							</div>
 
-					{/* To field */}
-					<div className='col-span-6'>
-						<FormField
-							control={form.control}
-							name="to"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>To</FormLabel>
-									<FormControl>
-										<Input
-											placeholder="To"
-											{...field}
-											onChange={(e) => {
-												field.onChange(e);
-												if (e.target.value.trim()) {
-													setToSuggestions(filterDestinations(e.target.value, destinations));
-													setShowToSuggestions(true);
-												} else {
-													setShowToSuggestions(false);
-												}
-											}}
-										/>
-									</FormControl>
-									<FormMessage />
-									{showToSuggestions && toSuggestions.length > 0 && field.value && (
-										<ul className="absolute z-10 bg-white shadow-lg rounded-b border">
-											{toSuggestions.map((suggestion) => (
-												<li
-													key={`${suggestion.code}-to`}
-													className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-													onClick={() => {
-														field.onChange(suggestion.name);
-														setShowToSuggestions(false);
+							{/* To field */}
+							<div className='w-full'>
+								<FormField
+									control={form.control}
+									name="to"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>To</FormLabel>
+											<FormControl>
+												<Input
+													placeholder="To"
+													{...field}
+													onChange={(e) => {
+														field.onChange(e);
+														if (e.target.value.trim()) {
+															setToSuggestions(filterDestinations(e.target.value, destinations));
+															setShowToSuggestions(true);
+														} else {
+															setShowToSuggestions(false);
+														}
 													}}
-												>
-													{suggestion.name}
-												</li>
-											))}
-										</ul>
+												/>
+											</FormControl>
+											<FormMessage />
+											{showToSuggestions && toSuggestions.length > 0 && field.value && (
+												<ul className="absolute z-10 bg-white shadow-lg rounded-b border">
+													{toSuggestions.map((suggestion) => (
+														<li
+															key={`${suggestion.code}-to`}
+															className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+															onClick={() => {
+																field.onChange(suggestion.name);
+																setShowToSuggestions(false);
+															}}
+														>
+															{suggestion.name}
+														</li>
+													))}
+												</ul>
+											)}
+										</FormItem>
 									)}
-								</FormItem>
-							)}
-						/>
-					</div>
+								/>
+							</div>
 
-					{/* Departure date field */}
-					<div className='col-span-6'>
-						<FormField
-							control={form.control}
-							name="departDate"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Departure Date</FormLabel>
-									<FormControl>
-										<Input
-											type="date"
-											{...field}
-											value={field.value ? formatDateForInput(field.value) : ''}
-											onChange={(e) => field.onChange(parseInputDate(e.target.value))}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-					</div>
+							{/* Departure date field */}
+							<div className='w-full'>
+								<FormField
+									control={form.control}
+									name="departDate"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Departure Date</FormLabel>
+											<FormControl>
+												<Input
+													type="date"
+													{...field}
+													value={field.value ? formatDateForInput(field.value) : ''}
+													onChange={(e) => field.onChange(parseInputDate(e.target.value))}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+							</div>
 
-					{/* Return date field */}
-					<div className='col-span-6'>
-						<FormField
-							control={form.control}
-							name="returnDate"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Return Date</FormLabel>
-									<FormControl>
-										<Input
-											type="date"
-											{...field}
-											value={field.value ? formatDateForInput(field.value) : ''}
-											onChange={(e) => field.onChange(parseInputDate(e.target.value))}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-					</div>
+							{/* Return date field */}
+							<div className='w-full'>
+								<FormField
+									control={form.control}
+									name="returnDate"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Return Date</FormLabel>
+											<FormControl>
+												<Input
+													type="date"
+													{...field}
+													value={field.value ? formatDateForInput(field.value) : ''}
+													onChange={(e) => field.onChange(parseInputDate(e.target.value))}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+							</div>
 
-					{/* Travelers field */}
-					<div className='col-span-6'>
-						<FormField
-							control={form.control}
-							name="travelers"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Travelers</FormLabel>
-									<FormControl>
-										<Input type="number" placeholder="Travelers" {...field} />
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-					</div>
+							{/* Travelers field */}
+							<div className='w-full'>
+								<FormField
+									control={form.control}
+									name="travelers"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Travelers</FormLabel>
+											<FormControl>
+												<Input type="number" placeholder="Travelers" {...field} />
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+							</div>
 
-					{/* Submit button */}
-					<Button
-						type="submit"
-						className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mt-3 rounded focus:outline-none focus:shadow-outline'
-					>
-						Submit
-					</Button>
-				</div>
-			</form>
-		</Form>
+							{/* Submit button */}
+							<Button
+								type="submit"
+								className='w-full md:w-auto bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
+							>
+								Submit
+							</Button>
+						</div>
+					</form>
+				</Form>
+			</div>
+		</>
 	);
 };
 

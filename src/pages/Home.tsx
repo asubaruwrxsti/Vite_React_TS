@@ -10,16 +10,20 @@ import SearchBar from '../components/SearchBar';
 
 const Home = () => {
 	return (
-		<div>
+		<>
 			<Navbar />
-			<h1 className="text-3xl text-center mt-10">Welcome to our Travel Agency</h1>
-			<div className="flex">
-				<SearchBar />
-				<DestinationList />
+			<h1 className="text-3xl text-center m-20">Welcome to our Travel Agency</h1>
+			<div className="flex flex-col md:flex-row justify-center gap-4 container mx-auto px-4">
+				<div className="w-full md:flex-1">
+					<SearchBar />
+				</div>
+				<div className="w-full md:flex-1">
+					<DestinationList />
+				</div>
 			</div>
 			<div className="h-20"></div>
 			<Footer />
-		</div>
+		</>
 	);
 };
 
