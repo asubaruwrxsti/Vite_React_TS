@@ -64,8 +64,6 @@ const Checkout = () => {
 
 	return (
 		<div className="checkout-container">
-			<Navbar />
-
 			<div className="checkout-content p-4">
 				<h1 className="text-2xl font-bold mb-4">Your Travel Details</h1>
 
@@ -206,7 +204,7 @@ const Checkout = () => {
 								<button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mt-3 rounded focus:outline-none focus:shadow-outline"
 									onClick={() => {
 										// On click, handle the logic if the user has selected a car or hotel
-										
+
 										// We need to get the flight data from localStorage
 										// Append the flight data to the flightData array if the user has already booked flights
 										let allFlightData = JSON.parse(localStorage.getItem('flightData') || '[]');
@@ -232,7 +230,7 @@ const Checkout = () => {
 
 										// Update the total price
 										flightData[index].total = flightData[index].total + flightData[index].carAccomodation.price + flightData[index].hotelAccomodation.price
-										
+
 										// Push the flight data to the allFlightData array and save it to localStorage
 										allFlightData.push(flightData[index]);
 										localStorage.setItem('flightData', JSON.stringify(allFlightData));
@@ -249,7 +247,6 @@ const Checkout = () => {
 					</div>
 				))}
 			</div>
-			<Footer />
 		</div>
 	);
 };

@@ -1,3 +1,5 @@
+import { ComponentType } from "react";
+
 export interface Destination {
     name: string;
     code?: string;
@@ -11,3 +13,12 @@ export type TravelDetails = {
     returnDate: string;
     travelers: number;
 };
+
+export interface RouteConfig {
+    path: string;
+    name: string;
+    element: ComponentType;
+    protected: boolean;
+    icon: ComponentType;
+    redirectIfLoggedIn?: boolean;
+}

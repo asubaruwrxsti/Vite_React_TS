@@ -7,7 +7,7 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { AlertContent, AlertOptions, AlertType, AlertContextType, getAlertStyles } from '@/lib/AlertContextUtils';
+import { AlertContent, AlertOptions, AlertType, AlertContextType, getAlertStyles } from '@/lib/utils/AlertContextUtils';
 import { cn } from '@/lib/utils';
 import { DEFAULT_TIMEOUT } from '@/lib/constants';
 

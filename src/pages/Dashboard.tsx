@@ -21,7 +21,6 @@ const Dashboard = () => {
 
 	return (
 		<div>
-			<Navbar />
 			{/*  Transform the flight data into a list of booked flights */}
 			{flightData.length > 0 ? (
 				<div className="container mx-auto p-4">
@@ -81,7 +80,6 @@ const Dashboard = () => {
 					<h1 className="text-2xl font-bold mb-4">No Booked Flights</h1>
 				</div>
 			)}
-			<Footer />
 		</div>
 	);
 };

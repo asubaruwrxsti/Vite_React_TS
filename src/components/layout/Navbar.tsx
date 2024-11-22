@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button"
+import { getPocketBase } from '@/lib/pocketbase';
+import { useAlert } from '@/hooks/useAlert';
+import { AlertType } from '@/lib/utils/AlertContextUtils';
 
 /**
  * The Navbar component
@@ -10,18 +13,20 @@ import { Button } from "@/components/ui/button"
 const Navbar = () => {
 	// Constant to handle the scroll effect and navigation
 	const [isScrolled, setIsScrolled] = useState(false);
+	
 	const navigate = useNavigate();
+	const { showAlert } = useAlert();
 
 	// Function to handle logout
 	function handleLogout(): void {
-		localStorage.removeItem('isLoggedIn');
-		localStorage.removeItem('flightData');
-		window.location.reload();
+		getPocketBase().authStore.clear();
+		showAlert('Logout Successful', 'You have successfully logged out!', { type: AlertType.Success });
+		navigate('/');
 	}
 
 	// Check if the user is logged in
 	function isLoggedIn(): boolean {
-		return localStorage.getItem('isLoggedIn') === 'true';
+		return getPocketBase().authStore.isValid;
 	}
 
 	useEffect(() => {
@@ -49,7 +54,7 @@ const Navbar = () => {
 						alt="Workflow"
 						className="w-10 mr-2"
 					/>
-					<span>Travel Agency</span>
+					<span>Tolls Stuff</span>
 				</div>
 
 				{/* Navigation links */}

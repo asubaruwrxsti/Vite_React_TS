@@ -3,7 +3,7 @@ import { useDestinations } from '@/hooks/useDestinations';
 import { useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { travelDetailsState } from '@/store';
-import { filterDestinations } from '@/lib/SearchBarUtils';
+import { filterDestinations } from '@/lib/utils/SearchBarUtils';
 import { Destination } from '@/types/types';
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
