@@ -9,8 +9,16 @@ import { SidebarProvider, SidebarTrigger } from './components/ui/sidebar';
 import { AppSidebar } from './components/layout/AppSidebar';
 import { useSidebar } from './components/ui/sidebar';
 import { useEffect, useState } from 'react';
-import { ArrowUp } from 'lucide-react';
+import { ArrowUp, LogOut, UserPen } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@radix-ui/react-avatar';
+import {
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+} from "@/components/ui/popover"
+import { Button } from './components/ui/button';
+import { useLogout } from './hooks/useLogout';
+
 
 /**
  * The main App component
@@ -20,6 +28,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@radix-ui/react-avatar';
 const PageWrapper = ({ title, children }: { title: string; children: React.ReactNode }) => {
 	const pb = getPocketBase();
 	const user = pb.authStore.model;
+	const logout = useLogout();
 
 	return (
 		<div className="p-16">
@@ -34,13 +43,37 @@ const PageWrapper = ({ title, children }: { title: string; children: React.React
 					<div className="flex items-center gap-4">
 						<span className="text-lg font-medium">Hello {user.name}!</span>
 						<div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-							<Avatar>
-								<AvatarImage
-									src={user.avatar ? `${pb.baseUrl}/api/files/${user.collectionId}/${user.id}/${user.avatar}` : "https://github.com/shadcn.png"}
-									className='rounded-full'
-								/>
-								<AvatarFallback>{user.name?.charAt(0) || 'U'}</AvatarFallback>
-							</Avatar>
+							<Popover>
+								<PopoverTrigger>
+									<Avatar>
+										<AvatarImage
+											src={user.avatar ? `${pb.baseUrl}/api/files/${user.collectionId}/${user.id}/${user.avatar}` : "https://github.com/shadcn.png"}
+											className='rounded-full'
+										/>
+										<AvatarFallback>{user.name?.charAt(0) || 'U'}</AvatarFallback>
+									</Avatar>
+								</PopoverTrigger>
+								<PopoverContent>
+									<div className="grid gap-4">
+										<div className="space-y-2">
+											<h4 className="font-medium leading-none">{user.name}</h4>
+											<p className="text-sm text-muted-foreground">
+												{user.email}
+											</p>
+										</div>
+										<div className="grid gap-2">
+											<div className="grid grid-cols-1 items-center gap-4">
+												<Button className="col-span-2" variant="outline">
+													<UserPen /> Profile
+												</Button>
+												<Button className="col-span-2" variant="destructive" onClick={logout}>
+													<LogOut /> Logout
+												</Button>
+											</div>
+										</div>
+									</div>
+								</PopoverContent>
+							</Popover>
 						</div>
 					</div>
 				)}
