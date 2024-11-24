@@ -66,9 +66,6 @@ const Profile = () => {
         }
     }, [userModel?.id]);
 
-
-    console.log("paymentInfoObj", paymentInfoObj);
-
     return (
         <>
             {userObj && (

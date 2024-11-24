@@ -35,7 +35,7 @@ export const AppRoutes: RouteConfig[] = [
         path: '/profile',
         name: 'Profile',
         element: Profile,
-        protected: false,
+        protected: true,
         icon: UserPen,
     },
     {
