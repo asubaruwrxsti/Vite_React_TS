@@ -24,7 +24,7 @@ const Footer = () => {
 					<p>Country</p>
 				</div>
 			</div>
-			<p className="text-center mt-8">&copy; 2023 Travel Agency</p>
+			<p className="text-center mt-8">&copy; 2024 Tolls Stuff</p>
 		</footer>
 	);
 };
