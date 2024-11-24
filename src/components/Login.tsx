@@ -62,7 +62,7 @@ const Login = () => {
 		<>
 			<div className="flex flex-col items-center justify-center">
 				<div className="w-full max-w-md">
-					<Alert className="bg-red-500 text-white px-4 py-4 rounded-lg mb-8 mt-2 shadow">
+					<Alert className="bg-red-500 text-white px-4 py-4">
 						<Terminal className="h-4 w-4" stroke='white' />
 						<AlertTitle>Heads up!</AlertTitle>
 						<AlertDescription>
@@ -73,7 +73,7 @@ const Login = () => {
 
 				<Form {...form}>
 					<form onSubmit={form.handleSubmit(handleLogin)} className="space-y-8 w-full max-w-md">
-						<div className="bg-white shadow-2xl rounded-lg px-8 pt-6 pb-8 mb-4 flex flex-col">
+						<div className="bg-white border rounded-lg px-8 pt-6 pb-8 mb-4 mt-4 flex flex-col border-gray-300">
 							<div className='col-span-6'>
 								<FormField
 									control={form.control}
@@ -89,7 +89,7 @@ const Login = () => {
 									)}
 								/>
 							</div>
-							<div className='col-span-6'>
+							<div className='col-span-6 mt-4'>
 								<FormField
 									control={form.control}
 									name="password"

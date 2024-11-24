@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate, Link } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
 import { AlertProvider } from './contexts/AlertContext';
 import { getPocketBase } from './lib/pocketbase';
@@ -9,7 +9,7 @@ import { SidebarProvider, SidebarTrigger } from './components/ui/sidebar';
 import { AppSidebar } from './components/layout/AppSidebar';
 import { useSidebar } from './components/ui/sidebar';
 import { useEffect, useState } from 'react';
-import { ArrowUp, LogOut, UserPen } from 'lucide-react';
+import { ArrowUp, LogIn, LogOut, Settings, UserPen } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@radix-ui/react-avatar';
 import {
 	Popover,
@@ -63,9 +63,16 @@ const PageWrapper = ({ title, children }: { title: string; children: React.React
 										</div>
 										<div className="grid gap-2">
 											<div className="grid grid-cols-1 items-center gap-4">
-												<Button className="col-span-2" variant="outline">
-													<UserPen /> Profile
-												</Button>
+												<Link to="/profile" className="col-span-2">
+													<Button variant="outline" className='w-full'>
+														<UserPen /> Profile
+													</Button>
+												</Link>
+												<Link to="/settings" className="col-span-2">
+													<Button variant="outline" className='w-full'>
+														<Settings /> Settings
+													</Button>
+												</Link>
 												<Button className="col-span-2" variant="destructive" onClick={logout}>
 													<LogOut /> Logout
 												</Button>
@@ -75,6 +82,14 @@ const PageWrapper = ({ title, children }: { title: string; children: React.React
 								</PopoverContent>
 							</Popover>
 						</div>
+					</div>
+				) || !user && title !== 'Login' && (
+					<div className="flex items-center gap-4">
+						<Link to="/login" className="col-span-2">
+							<Button variant="outline" className='w-full'>
+								<LogIn /> Login
+							</Button>
+						</Link>
 					</div>
 				)}
 			</div>
