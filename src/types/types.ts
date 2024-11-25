@@ -53,3 +53,16 @@ export interface PaymentInfoRecord {
     cvv: string;
     favorite: boolean;
 }
+
+export interface SubscriptionRecord {
+    id: string;
+    owner: UserRecord;
+    type: SubscriptionTypeRecord;
+}
+
+interface SubscriptionTypeRecord {
+    id: string;
+    name: string;
+    price: number;
+    payment_interval: string;
+}
