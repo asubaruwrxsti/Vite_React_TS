@@ -14,7 +14,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { PlusIcon, XIcon } from "lucide-react";
+import { CreditCard, PlusIcon, XIcon } from "lucide-react";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -40,6 +40,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useAlert } from "@/hooks/useAlert";
 import { AlertType } from "@/lib/utils/AlertContextUtils";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const Profile = () => {
     const pb = getPocketBase();
@@ -48,7 +49,7 @@ const Profile = () => {
     const [beaconsObj, setBeaconsObj] = useState<ListResult<BeaconRecord> | null>(null);
     const [paymentInfoObj, setPaymentInfoObj] = useState<ListResult<PaymentInfoRecord> | null>(null);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
-	const { showAlert } = useAlert();
+    const { showAlert } = useAlert();
 
     const fetchRecords = async () => {
         try {
@@ -131,7 +132,7 @@ const Profile = () => {
             const payload = {
                 ...values,
                 owner: userModel?.id,
-                favorite: false
+                favorite: true
             };
 
             await pb.collection('payment_info').create(payload);
@@ -221,166 +222,180 @@ const Profile = () => {
                             <h2 className="scroll-m-20 text-3xl font-semibold tracking-tight w-full mt-8">
                                 Payment Information
                             </h2>
-                            {(paymentInfoObj?.items || []).length > 0 && (
-                                <div className="flex justify-end mr-16">
-                                    <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                                        <AlertDialogTrigger asChild>
-                                            <Button
-                                                variant="outline"
-                                                size="sm"
-                                                className="mt-8"
-                                            >
-                                                <PlusIcon className="h-4 w-4 mr-2" />
-                                                Add Payment Method
-                                            </Button>
-                                        </AlertDialogTrigger>
-                                        <AlertDialogContent>
-                                            <Form {...form}>
-                                                <AlertDialogHeader>
-                                                    <AlertDialogTitle>Please fill in the fields.</AlertDialogTitle>
-                                                    <AlertDialogDescription asChild>
-                                                        <form className="space-y-8 w-full max-w-md">
-                                                            <div className="bg-white border rounded-lg px-8 pt-6 pb-8 mb-4 mt-4 flex flex-col border-gray-300">
-                                                                <div className='col-span-6'>
-                                                                    <FormField
-                                                                        control={form.control}
-                                                                        name="credit_card_number"
-                                                                        render={({ field }) => (
-                                                                            <FormItem>
-                                                                                <FormLabel>Credit Card Number</FormLabel>
-                                                                                <FormControl>
-                                                                                    <Input
-                                                                                        className="w-full"
-                                                                                        maxLength={19}
-                                                                                        placeholder="1234-5678-9012-3456"
-                                                                                        {...field}
-                                                                                        value={field.value.replace(/(\d{4})(?=\d)/g, '$1-')}
-                                                                                        onChange={(e) => {
-                                                                                            const value = e.target.value.replace(/\D/g, '');
-                                                                                            field.onChange(value);
-                                                                                        }}
-                                                                                    />
-                                                                                </FormControl>
-                                                                                <FormMessage />
-                                                                            </FormItem>
-                                                                        )}
-                                                                    />
-                                                                </div>
-                                                                <div className='col-span-6 mt-4'>
-                                                                    <FormField
-                                                                        control={form.control}
-                                                                        name="valid_thru"
-                                                                        render={({ field }) => (
-                                                                            <FormItem className="flex flex-col">
-                                                                                <FormLabel>Valid Thru</FormLabel>
-                                                                                <FormControl>
-                                                                                    <Input
-                                                                                        type="date"
-                                                                                        {...field}
-                                                                                        value={field.value instanceof Date ? field.value.toISOString().split('T')[0] : ''}
-                                                                                        onChange={(e) => {
-                                                                                            field.onChange(new Date(e.target.value));
-                                                                                        }}
-                                                                                    />
-                                                                                </FormControl>
-                                                                                <FormMessage />
-                                                                            </FormItem>
-                                                                        )}
-                                                                    />
-                                                                </div>
-                                                                <div className='col-span-6 mt-4'>
-                                                                    <FormField
-                                                                        control={form.control}
-                                                                        name="cvv"
-                                                                        render={({ field }) => (
-                                                                            <FormItem>
-                                                                                <FormLabel>CVV</FormLabel>
-                                                                                <FormControl>
-                                                                                    <Input placeholder="Type your CVV here ..." {...field} maxLength={3} minLength={3} />
-                                                                                </FormControl>
-                                                                                <FormMessage />
-                                                                            </FormItem>
-                                                                        )}
-                                                                    />
-                                                                </div>
+                            <div className="flex justify-end mr-16">
+                                <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                                    <AlertDialogTrigger asChild>
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            className="mt-8"
+                                        >
+                                            <PlusIcon className="h-4 w-4 mr-2" />
+                                            Add Payment Method
+                                        </Button>
+                                    </AlertDialogTrigger>
+                                    <AlertDialogContent>
+                                        <Form {...form}>
+                                            <AlertDialogHeader>
+                                                <AlertDialogTitle>Please fill in the fields.</AlertDialogTitle>
+                                                <AlertDialogDescription asChild>
+                                                    <form className="space-y-8 w-full max-w-md">
+                                                        <div className="bg-white border rounded-lg px-8 pt-6 pb-8 mb-4 mt-4 flex flex-col border-gray-300">
+                                                            <div className='col-span-6'>
+                                                                <FormField
+                                                                    control={form.control}
+                                                                    name="credit_card_number"
+                                                                    render={({ field }) => (
+                                                                        <FormItem>
+                                                                            <FormLabel>Credit Card Number</FormLabel>
+                                                                            <FormControl>
+                                                                                <Input
+                                                                                    className="w-full"
+                                                                                    maxLength={19}
+                                                                                    placeholder="1234-5678-9012-3456"
+                                                                                    {...field}
+                                                                                    value={field.value.replace(/(\d{4})(?=\d)/g, '$1-')}
+                                                                                    onChange={(e) => {
+                                                                                        const value = e.target.value.replace(/\D/g, '');
+                                                                                        field.onChange(value);
+                                                                                    }}
+                                                                                />
+                                                                            </FormControl>
+                                                                            <FormMessage />
+                                                                        </FormItem>
+                                                                    )}
+                                                                />
                                                             </div>
-                                                        </form>
-                                                    </AlertDialogDescription>
-                                                </AlertDialogHeader>
-                                                <AlertDialogFooter>
-                                                    <AlertDialogCancel>
-                                                        Cancel
-                                                    </AlertDialogCancel>
-                                                    <AlertDialogAction onClick={form.handleSubmit(createPayment)}>
-                                                        Add Payment Method
-                                                    </AlertDialogAction>
-                                                </AlertDialogFooter>
-                                            </Form>
-                                        </AlertDialogContent>
-                                    </AlertDialog>
-                                </div>
-                            )}
+                                                            <div className='col-span-6 mt-4'>
+                                                                <FormField
+                                                                    control={form.control}
+                                                                    name="valid_thru"
+                                                                    render={({ field }) => (
+                                                                        <FormItem className="flex flex-col">
+                                                                            <FormLabel>Valid Thru</FormLabel>
+                                                                            <FormControl>
+                                                                                <Input
+                                                                                    type="date"
+                                                                                    {...field}
+                                                                                    value={field.value instanceof Date ? field.value.toISOString().split('T')[0] : ''}
+                                                                                    onChange={(e) => {
+                                                                                        field.onChange(new Date(e.target.value));
+                                                                                    }}
+                                                                                />
+                                                                            </FormControl>
+                                                                            <FormMessage />
+                                                                        </FormItem>
+                                                                    )}
+                                                                />
+                                                            </div>
+                                                            <div className='col-span-6 mt-4'>
+                                                                <FormField
+                                                                    control={form.control}
+                                                                    name="cvv"
+                                                                    render={({ field }) => (
+                                                                        <FormItem>
+                                                                            <FormLabel>CVV</FormLabel>
+                                                                            <FormControl>
+                                                                                <Input placeholder="Type your CVV here ..." {...field} maxLength={3} minLength={3} />
+                                                                            </FormControl>
+                                                                            <FormMessage />
+                                                                        </FormItem>
+                                                                    )}
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </AlertDialogDescription>
+                                            </AlertDialogHeader>
+                                            <AlertDialogFooter>
+                                                <AlertDialogCancel>
+                                                    Cancel
+                                                </AlertDialogCancel>
+                                                <AlertDialogAction onClick={form.handleSubmit(createPayment)}>
+                                                    Add Payment Method
+                                                </AlertDialogAction>
+                                            </AlertDialogFooter>
+                                        </Form>
+                                    </AlertDialogContent>
+                                </AlertDialog>
+                            </div>
                         </div>
                         <div className="flex flex-col ml-16">
                             <div className="flex flex-row gap-4 mt-8 w-full">
-                                {paymentInfoObj?.items.map((paymentInfo, index) => (
-                                    <div key={index} className="flex flex-col gap-4">
-                                        <div className="flex justify-between items-start bg-primary/10 p-4 rounded-2xl shadow-lg relative">
-                                            <AlertDialog>
-                                                <AlertDialogTrigger className="absolute -top-4 -right-4 h-8 w-8 rounded-full bg-white shadow-lg flex items-center justify-center hover:bg-red-500 hover:text-white transition-colors duration-300">
-                                                    <XIcon className="h-4 w-4" />
-                                                </AlertDialogTrigger>
-                                                <AlertDialogContent>
-                                                    <AlertDialogHeader>
-                                                        <AlertDialogTitle>Are you sure you want to delete this payment method?</AlertDialogTitle>
-                                                        <AlertDialogDescription>
-                                                            This action cannot be undone.
-                                                        </AlertDialogDescription>
-                                                    </AlertDialogHeader>
-                                                    <AlertDialogFooter>
-                                                        <AlertDialogCancel>
-                                                            Cancel
-                                                        </AlertDialogCancel>
-                                                        <AlertDialogAction
-                                                            onClick={() => handleDeletePayment(paymentInfo.id)}
-                                                        >
-                                                            Delete
-                                                        </AlertDialogAction>
-                                                    </AlertDialogFooter>
-                                                </AlertDialogContent>
-                                            </AlertDialog>
+                                {(paymentInfoObj?.items || []).length > 0 ? (
+                                    <>
+                                        {paymentInfoObj?.items.map((paymentInfo, index) => (
+                                            <div key={index} className="flex flex-col gap-4">
+                                                <div className="flex justify-between items-start bg-primary/10 p-4 rounded-2xl shadow-lg relative">
+                                                    <AlertDialog>
+                                                        <AlertDialogTrigger className="absolute -top-4 -right-4 h-8 w-8 rounded-full bg-white shadow-lg flex items-center justify-center hover:bg-red-500 hover:text-white transition-colors duration-300">
+                                                            <XIcon className="h-4 w-4" />
+                                                        </AlertDialogTrigger>
+                                                        <AlertDialogContent>
+                                                            <AlertDialogHeader>
+                                                                <AlertDialogTitle>Are you sure you want to delete this payment method?</AlertDialogTitle>
+                                                                <AlertDialogDescription>
+                                                                    This action cannot be undone.
+                                                                </AlertDialogDescription>
+                                                            </AlertDialogHeader>
+                                                            <AlertDialogFooter>
+                                                                <AlertDialogCancel>
+                                                                    Cancel
+                                                                </AlertDialogCancel>
+                                                                <AlertDialogAction
+                                                                    onClick={() => handleDeletePayment(paymentInfo.id)}
+                                                                >
+                                                                    Delete
+                                                                </AlertDialogAction>
+                                                            </AlertDialogFooter>
+                                                        </AlertDialogContent>
+                                                    </AlertDialog>
 
-                                            <div className="flex justify-between flex-1">
-                                                <div className="flex flex-col gap-4">
-                                                    <Label className="text-lg font-medium">Credit Card Number</Label>
-                                                    <Label className="text-lg font-medium">Valid Thru</Label>
-                                                </div>
-                                                <div className="flex flex-col gap-4 ml-8">
-                                                    <span className="text-lg text-right">
-                                                        {paymentInfo.credit_card_number
-                                                            ? '**** **** **** ' + paymentInfo.credit_card_number.slice(-4)
-                                                            : 'No card on file'
-                                                        }
-                                                    </span>
-                                                    <span className="text-lg text-right">{formatDate(paymentInfo.valid_thru)}</span>
+                                                    <div className="flex justify-between flex-1">
+                                                        <div className="flex flex-col gap-4">
+                                                            <Label className="text-lg font-medium">Credit Card Number</Label>
+                                                            <Label className="text-lg font-medium">Valid Thru</Label>
+                                                        </div>
+                                                        <div className="flex flex-col gap-4 ml-8">
+                                                            <span className="text-lg text-right">
+                                                                {paymentInfo.credit_card_number
+                                                                    ? '**** **** **** ' + paymentInfo.credit_card_number.slice(-4)
+                                                                    : 'No card on file'
+                                                                }
+                                                            </span>
+                                                            <span className="text-lg text-right">{formatDate(paymentInfo.valid_thru)}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div className="flex justify-end ml-8">
+                                                        {paymentInfo.favorite ? (
+                                                            <Badge variant="default">
+                                                                Favorite
+                                                            </Badge>
+                                                        ) : (
+                                                            <Link to="#" onClick={() => handleSetFavorite(paymentInfo.id)}>
+                                                                <Badge variant="secondary" className="cursor-pointer">
+                                                                    Set Favorite
+                                                                </Badge>
+                                                            </Link>
+                                                        )}
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div className="flex justify-end ml-8">
-                                                {paymentInfo.favorite ? (
-                                                    <Badge variant="default">
-                                                        Favorite
-                                                    </Badge>
-                                                ) : (
-                                                    <Link to="#" onClick={() => handleSetFavorite(paymentInfo.id)}>
-                                                        <Badge variant="secondary" className="cursor-pointer">
-                                                            Set Favorite
-                                                        </Badge>
-                                                    </Link>
-                                                )}
-                                            </div>
-                                        </div>
+                                        ))}
+                                    </>
+                                ) : (
+                                    <div className="flex justify-center w-full mt-8">
+                                        <Alert className="bg-gray-300 text-gray-700 px-4 py-4 max-w-lg w-full border border-gray-500">
+                                            <CreditCard className="h-4 w-4 mx-auto mb-2" stroke='gray' />
+                                            <AlertTitle className="text-gray-700">
+                                                You have no payment methods.
+                                            </AlertTitle>
+                                            <AlertDescription className="text-gray-700">
+                                                Please add a payment method.
+                                            </AlertDescription>
+                                        </Alert>
                                     </div>
-                                ))}
+                                )}
                             </div>
                         </div>
                     </div>
