@@ -57,7 +57,11 @@ export interface PaymentInfoRecord {
 export interface SubscriptionRecord {
     id: string;
     owner: UserRecord;
-    type: SubscriptionTypeRecord;
+    type: string;
+    expand: {
+        type: SubscriptionTypeRecord;
+    };
+    valid_until: string;
 }
 
 interface SubscriptionTypeRecord {
