@@ -39,6 +39,7 @@ export interface UserRecord {
 };
 
 export interface BeaconRecord {
+    id: string;
     name: string;
     active: boolean;
     last_seen: string;
