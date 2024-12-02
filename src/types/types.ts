@@ -63,6 +63,8 @@ export interface SubscriptionRecord {
         type: SubscriptionTypeRecord;
     };
     valid_until: string;
+    created: string;
+    updated: string;
 }
 
 interface SubscriptionTypeRecord {

@@ -57,13 +57,13 @@ const Profile = () => {
             setUserObj(user);
 
             const beacons = await pb.collection('beacons').getList<BeaconRecord>(1, 10, {
-                filter: `owner.id = "${user.id}"`,
+                filter: `owner.id = "${userModel?.id}"`,
                 expand: 'owner'
             });
             setBeaconsObj(beacons);
 
             const paymentInfo = await pb.collection('payment_info').getList<PaymentInfoRecord>(1, 10, {
-                filter: `owner.id = "${user.id}"`,
+                filter: `owner.id = "${userModel?.id}"`,
                 expand: 'owner'
             });
             setPaymentInfoObj(paymentInfo);
