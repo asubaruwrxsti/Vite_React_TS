@@ -5,11 +5,8 @@ import { getPocketBase } from './lib/pocketbase';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import Footer from './components/layout/Footer';
 import { AppRoutes } from './lib/constants';
-import { SidebarProvider, SidebarTrigger } from './components/ui/sidebar';
-import { AppSidebar } from './components/layout/AppSidebar';
-import { useSidebar } from './components/ui/sidebar';
 import { useEffect, useState } from 'react';
-import { ArrowUp, LogIn, LogOut, Settings, UserPen } from 'lucide-react';
+import { AppWindowMac, ArrowUp, Bell, CircleHelp, CircleUserRound, House, KeyRound, LogIn, LogOut, PictureInPicture2, Radio, Settings, UserRound, UserRoundPen } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@radix-ui/react-avatar';
 import {
 	Popover,
@@ -18,6 +15,7 @@ import {
 } from "@/components/ui/popover"
 import { Button } from './components/ui/button';
 import { useLogout } from './hooks/useLogout';
+import { Input } from "@/components/ui/input"
 
 
 /**
@@ -25,7 +23,7 @@ import { useLogout } from './hooks/useLogout';
  * Handles routing
  */
 
-const PageWrapper = ({ title, children }: { title: string; children: React.ReactNode }) => {
+const PageWrapper_Common = ({ title, children }: { title: string; children: React.ReactNode }) => {
 	const pb = getPocketBase();
 	const user = pb.authStore.model;
 	const logout = useLogout();
@@ -65,7 +63,7 @@ const PageWrapper = ({ title, children }: { title: string; children: React.React
 											<div className="grid grid-cols-1 items-center gap-4">
 												<Link to="/profile" className="col-span-2">
 													<Button variant="outline" className='w-full'>
-														<UserPen /> Profile
+														<UserRoundPen /> Profile
 													</Button>
 												</Link>
 												<Link to="/settings" className="col-span-2">
@@ -99,6 +97,93 @@ const PageWrapper = ({ title, children }: { title: string; children: React.React
 		</div>
 	);
 };
+
+const PageWrapper_Auth = ({ children }: { children: React.ReactNode }) => {
+	return (
+		<div className="p-16">
+			<div className="flex">
+				<div className="sticky top-5 z-40 flex flex-col justify-between items-center p-8 mr-4 shadow-lg rounded-2xl bg-white">
+					<div className="flex flex-col items-center w-full h-full">
+						<div className="flex items-center justify-center rounded-full w-12 h-12">
+							<CircleUserRound />
+						</div>
+
+						<div className="flex items-center justify-center rounded-full w-12 h-12">
+							<Bell /> {/* <BellDot /> */}
+						</div>
+
+						<div className="flex items-center justify-center rounded-full w-12 h-12">
+							<Settings />
+						</div>
+
+						<div className="flex items-center justify-center rounded-full w-12 h-12">
+							<CircleHelp />
+						</div>
+
+						<div className="flex items-center justify-center rounded-full w-12 h-12 mt-auto">
+							<House />
+						</div>
+					</div>
+				</div>
+				<div className="flex flex-col justify-between items-center p-8 ml-4 mr-4 shadow-lg rounded-2xl w-1/5">
+					<div className="flex flex-col w-full h-full">
+						<h2 className="mt-10 mb-5 scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
+							Settings
+						</h2>
+						<Input placeholder="Search" className='rounded-full' />
+						<div className="flex flex-col mt-5">
+							<Link to="#" className="flex items-start gap-8 mb-2 border-b pb-8">
+								<UserRound />
+								<div className="flex flex-col">
+									<span>Profile</span>
+									<span className="text-sm text-gray-500">Setting description here</span>
+								</div>
+							</Link>
+							<Link to="/#" className="flex items-start gap-8 mb-2 border-b pb-8">
+								<PictureInPicture2 />
+								<div className="flex flex-col">
+									<span>Subscription</span>
+									<span className="text-sm text-gray-500">Setting description here</span>
+								</div>
+							</Link>
+							<Link to="/#" className="flex items-start gap-8 mb-2 border-b pb-8">
+								<Radio />
+								<div className="flex flex-col">
+									<span>Beacon</span>
+									<span className="text-sm text-gray-500">Setting description here</span>
+								</div>
+							</Link>
+							<Link to="/#" className="flex items-start gap-8 mb-2 border-b pb-8">
+								<AppWindowMac />
+								<div className="flex flex-col">
+									<span>App configuration</span>
+									<span className="text-sm text-gray-500">Setting description here</span>
+								</div>
+							</Link>
+							<Link to="/#" className="flex items-start gap-8 mb-2 border-b pb-8">
+								<Bell />
+								<div className="flex flex-col">
+									<span>Notification</span>
+									<span className="text-sm text-gray-500">Setting description here</span>
+								</div>
+							</Link>
+							<Link to="/#" className="flex items-start gap-8 mb-2">
+								<KeyRound />
+								<div className="flex flex-col">
+									<span>Privacy</span>
+									<span className="text-sm text-gray-500">Setting description here</span>
+								</div>
+							</Link>
+						</div>
+					</div>
+				</div>
+				<div className="bg-white shadow-xl rounded-2xl p-8 ml-4 flex-1">
+					{children}
+				</div>
+			</div>
+		</div>
+	);
+}
 
 const ScrollToTop = () => {
 	const [isVisible, setIsVisible] = useState(false);
@@ -142,40 +227,11 @@ const ScrollToTop = () => {
 };
 
 const AppLayout = () => {
-	const { open } = useSidebar();
 	const isLoggedIn = getPocketBase().authStore.isValid;
 
 	return (
 		<>
-			<div style={{
-				position: 'fixed',
-				top: 0,
-				left: 0,
-				height: '100vh',
-				zIndex: 1000,
-				display: 'flex',
-				alignItems: 'flex-start'
-			}}>
-				<AppSidebar />
-				<SidebarTrigger className='m-2'>Menu</SidebarTrigger>
-			</div>
-			{open && (
-				<div style={{
-					position: 'fixed',
-					top: 0,
-					left: 0,
-					right: 0,
-					bottom: 0,
-					backgroundColor: 'rgba(0, 0, 0, 0.5)',
-					backdropFilter: 'blur(4px)',
-					zIndex: 999,
-					transition: 'all 0.3s ease-in-out'
-				}} />
-			)}
-			<main style={{
-				transition: 'all 0.3s ease-in-out',
-				filter: open ? 'blur(4px)' : 'none',
-			}}>
+			<main>
 				<Routes>
 					{AppRoutes.map(({ path, name, element: Component, protected: isProtected, redirectIfLoggedIn }) => (
 						<Route
@@ -186,14 +242,17 @@ const AppLayout = () => {
 									<Navigate to="/" />
 								) : isProtected ? (
 									<ProtectedRoute>
-										<PageWrapper title={name}>
+										<PageWrapper_Auth>
 											<Component />
-										</PageWrapper>
+										</PageWrapper_Auth>
 									</ProtectedRoute>
 								) : (
-									<PageWrapper title={name}>
-										<Component />
-									</PageWrapper>
+									<>
+										<PageWrapper_Common title={name}>
+											<Component />
+										</PageWrapper_Common>
+										<Footer />
+									</>
 								)
 							}
 						/>
@@ -208,13 +267,10 @@ const App = () => {
 	return (
 		<RecoilRoot>
 			<AlertProvider>
-				<SidebarProvider defaultOpen={false}>
-					<Router>
-						<AppLayout />
-					</Router>
-				</SidebarProvider>
+				<Router>
+					<AppLayout />
+				</Router>
 				<ScrollToTop />
-				<Footer />
 			</AlertProvider>
 		</RecoilRoot>
 	);
