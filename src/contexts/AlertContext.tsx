@@ -10,6 +10,7 @@ import {
 import { AlertContent, AlertOptions, AlertType, AlertContextType, getAlertStyles } from '@/lib/utils/AlertContextUtils';
 import { cn } from '@/lib/utils';
 import { DEFAULT_TIMEOUT } from '@/lib/constants';
+import React from 'react';
 
 // Create the context with a defined type
 export const AlertContext = createContext<AlertContextType | undefined>(undefined);
@@ -55,16 +56,21 @@ export const AlertProvider = ({ children }: { children: ReactNode }) => {
         <AlertContext.Provider value={{ showAlert, hideAlert }}>
             {children}
             <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
-                <AlertDialogContent className={cn(
-                    getAlertStyles(alertContent),
-                    alertContent.className
-                )}>
-                    <AlertDialogHeader>
-                        <AlertDialogTitle>{alertContent.title}</AlertDialogTitle>
-                    </AlertDialogHeader>
-                    <AlertDialogDescription>{alertContent.description}</AlertDialogDescription>
-                    <AlertDialogAction onClick={hideAlert}>Close</AlertDialogAction>
-                </AlertDialogContent>
+                {alertContent && (
+                    <AlertDialogContent className={cn(
+                        getAlertStyles(alertContent).styles,
+                        alertContent.className
+                    )}>
+                        <AlertDialogHeader>
+                            <div className="flex items-center">
+                                {React.createElement(getAlertStyles(alertContent).icon, { className: 'mr-2' })}
+                                <AlertDialogTitle>{alertContent.title}</AlertDialogTitle>
+                            </div>
+                        </AlertDialogHeader>
+                        <AlertDialogDescription>{alertContent.description}</AlertDialogDescription>
+                        <AlertDialogAction onClick={hideAlert}>Close</AlertDialogAction>
+                    </AlertDialogContent>
+                )}
             </AlertDialog>
         </AlertContext.Provider>
     );
