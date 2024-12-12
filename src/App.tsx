@@ -102,7 +102,7 @@ const PageWrapper_Auth = ({ children }: { children: React.ReactNode }) => {
 	return (
 		<div className="p-16">
 			<div className="flex">
-				<div className="sticky top-5 z-40 flex flex-col justify-between items-center p-4 mr-4 shadow-lg rounded-2xl bg-white">
+				<div className="sticky top-5 z-40 flex flex-col justify-between items-center p-4 mr-4 shadow-lg rounded-2xl bg-white max-h-[75vh]">
 					<div className="flex flex-col items-center w-full h-full">
 						<div className="flex items-center justify-center rounded-full w-12 h-12">
 							<CircleUserRound />
@@ -125,7 +125,7 @@ const PageWrapper_Auth = ({ children }: { children: React.ReactNode }) => {
 						</div>
 					</div>
 				</div>
-				<div className="flex flex-col justify-between items-center p-8 ml-4 mr-4 shadow-lg rounded-2xl w-1/5">
+				<div className="sticky top-5 z-40 flex flex-col justify-between items-center p-8 ml-4 mr-4 shadow-lg rounded-2xl w-1/5 max-h-[75vh]">
 					<div className="flex flex-col w-full h-full">
 						<h2 className="mt-10 mb-5 scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
 							Settings
@@ -177,7 +177,7 @@ const PageWrapper_Auth = ({ children }: { children: React.ReactNode }) => {
 						</div>
 					</div>
 				</div>
-				<div className="bg-white shadow-xl rounded-2xl p-8 ml-4 flex-1">
+				<div className="bg-white shadow-xl rounded-2xl p-8 ml-4 flex-1 h-full">
 					{children}
 				</div>
 			</div>
