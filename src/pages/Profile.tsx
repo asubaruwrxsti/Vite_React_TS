@@ -131,7 +131,7 @@ const Profile = () => {
                         <h2 className="scroll-m-20 text-3xl font-semibold">
                             Profile
                         </h2>
-                        <p className="text-gray-500 ">
+                        <p className="text-gray-500 max-w-2xl">
                             Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem, minima asperiores? Sapiente, sunt necessitatibus, cumque temporibus molestiae quaerat aperiam laboriosam ipsam doloribus quidem saepe delectus quis magni modi quas earum.
                         </p>
                     </div>
@@ -164,7 +164,7 @@ const Profile = () => {
 
                             <Form {...generalInformationForm}>
                                 <form onSubmit={generalInformationForm.handleSubmit(handleGeneralInformationUpdate)} className="w-full max-w-lg">
-                                    <div className="flex flex-wrap gap-4 mt-5 items-end">
+                                    <div className="flex flex-wrap gap-4 mt-5 items-center">
                                         <div className='flex-1'>
                                             <FormField
                                                 control={generalInformationForm.control}
@@ -175,7 +175,9 @@ const Profile = () => {
                                                         <FormControl>
                                                             <Input className="rounded-xl" placeholder="Type your first name here ..." {...field} />
                                                         </FormControl>
-                                                        <FormMessage />
+                                                        <div className="h-6">
+                                                            <FormMessage />
+                                                        </div>
                                                     </FormItem>
                                                 )}
                                             />
@@ -190,12 +192,14 @@ const Profile = () => {
                                                         <FormControl>
                                                             <Input className="rounded-xl" placeholder="Type your last name here ..." {...field} />
                                                         </FormControl>
-                                                        <FormMessage />
+                                                        <div className="h-6">
+                                                            <FormMessage />
+                                                        </div>
                                                     </FormItem>
                                                 )}
                                             />
                                         </div>
-                                        <div>
+                                        <div className='flex items-center'>
                                             <Button type="submit" className='bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-xl focus:outline-none focus:shadow-outline'>
                                                 Save
                                             </Button>
@@ -210,13 +214,13 @@ const Profile = () => {
                             <h2 className="scroll-m-20 text-3xl font-semibold">
                                 Passwords
                             </h2>
-                            <p className="text-gray-500">
+                            <p className="text-gray-500 max-w-2xl">
                                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem, minima asperiores? Sapiente, sunt necessitatibus, cumque temporibus molestiae quaerat aperiam laboriosam ipsam doloribus quidem saepe delectus quis magni modi quas earum.
                             </p>
                         </div>
                         <Form {...passwordForm}>
                             <form onSubmit={passwordForm.handleSubmit(handlePasswordUpdate)} className="w-full flex justify-center">
-                                <div className="flex flex-wrap gap-8 mt-5 items-end">
+                                <div className="flex flex-wrap gap-8 mt-5 items-center">
                                     <div className='flex-1'>
                                         <FormField
                                             control={passwordForm.control}
@@ -227,7 +231,9 @@ const Profile = () => {
                                                     <FormControl>
                                                         <Input className="rounded-xl w-[300px]" placeholder="Type your current password here ..." {...field} />
                                                     </FormControl>
-                                                    <FormMessage />
+                                                    <div className="h-6">
+                                                        <FormMessage />
+                                                    </div>
                                                 </FormItem>
                                             )}
                                         />
@@ -242,12 +248,14 @@ const Profile = () => {
                                                     <FormControl>
                                                         <Input className="rounded-xl w-[300px]" placeholder="Type your new password here ..." {...field} />
                                                     </FormControl>
-                                                    <FormMessage />
+                                                    <div className="h-6">
+                                                        <FormMessage />
+                                                    </div>
                                                 </FormItem>
                                             )}
                                         />
                                     </div>
-                                    <div>
+                                    <div className='flex items-center'>
                                         <Button type="submit" className='bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-xl focus:outline-none focus:shadow-outline'>
                                             Save
                                         </Button>
@@ -261,13 +269,13 @@ const Profile = () => {
                             <h2 className="scroll-m-20 text-3xl font-semibold">
                                 Contact Email
                             </h2>
-                            <p className="text-gray-500">
+                            <p className="text-gray-500 max-w-2xl">
                                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem, minima asperiores? Sapiente, sunt necessitatibus, cumque temporibus molestiae quaerat aperiam laboriosam ipsam doloribus quidem saepe delectus quis magni modi quas earum.
                             </p>
                         </div>
                         <Form {...emailForm}>
                             <form onSubmit={emailForm.handleSubmit(handleEmailUpdate)} className="w-full max-w-lg">
-                                <div className="flex flex-wrap gap-4 mt-5 items-end">
+                                <div className="flex flex-wrap gap-4 mt-5 items-center">
                                     <div className='flex-1'>
                                         <FormField
                                             control={emailForm.control}
@@ -276,16 +284,18 @@ const Profile = () => {
                                                 <FormItem>
                                                     <FormLabel className="text-gray-500">Contact Email</FormLabel>
                                                     <FormControl>
-                                                        <Input className="rounded-xl" placeholder="Type your email here ..." {...field} />
+                                                        <Input className="rounded-xl w-[300px]" placeholder="Type your email here ..." {...field} />
                                                     </FormControl>
-                                                    <FormMessage />
+                                                    <div className="h-6">
+                                                        <FormMessage />
+                                                    </div>
                                                 </FormItem>
                                             )}
                                         />
                                     </div>
-                                    <div>
+                                    <div className='flex items-center'>
                                         <Button type="submit" className='bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-xl focus:outline-none focus:shadow-outline'>
-                                            <Plus />Add Email
+                                            <Plus /> Add Email
                                         </Button>
                                     </div>
                                 </div>
