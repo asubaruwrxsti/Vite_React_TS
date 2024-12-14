@@ -7,7 +7,8 @@ import {
 	PopoverTrigger,
 } from "@/components/ui/popover"
 import { Button } from "../ui/button";
-import { Link, UserRoundPen, Settings, LogOut, LogIn } from "lucide-react";
+import { UserRoundPen, Settings, LogOut, LogIn } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export const NavbarPublic = ({ title, children }: { title: string; children: React.ReactNode }) => {
 	const pb = getPocketBase();
