@@ -1,7 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@radix-ui/react-avatar';
 import { UserRoundPen, Settings, LogOut, LogIn } from "lucide-react";
 import { Link } from "react-router-dom";
-
 import { Button } from "../ui/button";
 
 import {
@@ -11,11 +10,34 @@ import {
 } from "@/components/ui/popover"
 import { useLogout } from "@/hooks/useLogout";
 import { getPocketBase } from "@/lib/pocketbase";
+import { useEffect, useState } from 'react';
+import { UserRecord } from '@/types/types';
 
 export const NavbarPublic = ({ title, children }: { title: string; children: React.ReactNode }) => {
 	const pb = getPocketBase();
-	const user = pb.authStore.model;
+	const userModel = pb.authStore.model;
+	const [userAvatarImage, setUserAvatarImage] = useState<string>();
+	const [userObj, setUserObj] = useState<UserRecord | null>(null);
 	const logout = useLogout();
+
+	const fetchRecords = async () => {
+		try {
+			const user = await pb.collection('users').getOne<UserRecord>(userModel?.id);
+			setUserObj(user);
+
+			const fileToken = await pb.files.getToken();
+			const url = pb.files.getUrl(user, user?.avatar, { 'token': fileToken });
+			setUserAvatarImage(url);
+		} catch (error) {
+			console.error('Error:', error);
+		}
+	};
+
+	useEffect(() => {
+		if (userModel?.id) {
+			fetchRecords();
+		}
+	}, [userModel?.id]);
 
 	return (
 		<div className="p-16">
@@ -26,26 +48,29 @@ export const NavbarPublic = ({ title, children }: { title: string; children: Rea
 					</h1>
 				</div>
 
-				{user && (
+				{userObj && (
 					<div className="flex items-center gap-4">
-						<span className="text-lg font-medium">Hello {user.name}!</span>
-						<div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+						<span className="text-lg font-medium">Hello {userObj.name}!</span>
+						<div className="rounded-full bg-primary/10 flex items-center justify-center">
 							<Popover>
-								<PopoverTrigger>
-									<Avatar>
+								<PopoverTrigger asChild>
+									<Avatar className="h-12 w-12 cursor-pointer">
 										<AvatarImage
-											src={user.avatar ? `${pb.baseUrl}/api/files/${user.collectionId}/${user.id}/${user.avatar}` : "https://github.com/shadcn.png"}
-											className='rounded-full'
+											src={userAvatarImage}
+											alt="Avatar"
+											className="h-full w-full object-cover rounded-full"
 										/>
-										<AvatarFallback>{user.name?.charAt(0) || 'U'}</AvatarFallback>
+										<AvatarFallback className="w-full h-full flex items-center justify-center text-2xl">
+											{userObj.name?.charAt(0) || 'U'}
+										</AvatarFallback>
 									</Avatar>
 								</PopoverTrigger>
 								<PopoverContent>
 									<div className="grid gap-4">
 										<div className="space-y-2">
-											<h4 className="font-medium leading-none">{user.name}</h4>
+											<h4 className="font-medium leading-none">{userObj?.name}</h4>
 											<p className="text-sm text-muted-foreground">
-												{user.email}
+												{userObj?.email}
 											</p>
 										</div>
 										<div className="grid gap-2">
@@ -70,7 +95,7 @@ export const NavbarPublic = ({ title, children }: { title: string; children: Rea
 							</Popover>
 						</div>
 					</div>
-				) || !user && title !== 'Login' && (
+				) || !userObj && title !== 'Login' && (
 					<div className="flex items-center gap-4">
 						<Link to="/login" className="col-span-2">
 							<Button variant="outline" className='w-full'>
