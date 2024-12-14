@@ -1,13 +1,10 @@
 // SearchBar.tsx
-import { useDestinations } from '@/hooks/useDestinations';
-import { useState } from 'react';
-import { useRecoilState } from 'recoil';
-import { travelDetailsState } from '@/store';
-import { filterDestinations } from '@/lib/utils/SearchBarUtils';
-import { Destination } from '@/types/types';
-import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useState } from 'react';
 import { useForm } from "react-hook-form"
+import { useRecoilState } from 'recoil';
+import { z } from "zod"
+
 import { Button } from "@/components/ui/button"
 import {
 	Form,
@@ -18,7 +15,11 @@ import {
 	FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { useDestinations } from '@/hooks/useDestinations';
 import { formatDateForInput, parseInputDate } from '@/lib/utils';
+import { filterDestinations } from '@/lib/utils/SearchBarUtils';
+import { travelDetailsState } from '@/store';
+import { Destination } from '@/types/types';
 
 const SearchBar = () => {
 	// API-related hooks

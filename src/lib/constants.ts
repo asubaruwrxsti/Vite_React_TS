@@ -1,9 +1,11 @@
-import { RouteConfig } from "@/types/types";
-import Home from "@/pages/Home";
-import Dashboard from "@/pages/Dashboard";
-import Login from "@/components/Login";
-import Profile from "@/pages/Profile";
 import { CircleGauge, House, LogIn, UserPen } from "lucide-react";
+
+import Login from "@/components/Login";
+import Dashboard from "@/pages/Dashboard";
+import Home from "@/pages/Home";
+import Profile from "@/pages/Profile";
+import { RouteConfig } from "@/types/types";
+
 
 export const DEFAULT_TIMEOUT = 3000;
 export const CURRENCY = 'ALL';

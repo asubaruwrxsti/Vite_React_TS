@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button";
 import { BellRing, Check, RadioTower, ReceiptText, ShieldEllipsis } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 /**
  * The Home page

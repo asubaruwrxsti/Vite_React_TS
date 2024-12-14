@@ -1,4 +1,5 @@
 import { Navigate } from 'react-router-dom';
+
 import { getPocketBase } from '../lib/pocketbase';
 
 interface ProtectedRouteProps {

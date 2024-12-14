@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "lint": "eslint \"src/**/*.{ts,tsx}\" --fix",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -46,8 +46,9 @@
     "@vitejs/plugin-react": "latest",
     "autoprefixer": "^10.4.20",
     "eslint": "^8.57.1",
+    "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-react": "^7.37.2",
-    "eslint-plugin-react-hooks": "latest",
+    "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-react-refresh": "latest",
     "globals": "^15.13.0",
     "postcss": "^8.4.49",

@@ -1,11 +1,20 @@
-import { useAlert } from "@/hooks/useAlert";
-import { getPocketBase } from "@/lib/pocketbase";
-import { UserRecord } from "@/types/types";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { useEffect, useState } from "react";
-import { z } from "zod"
+import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod"
+import { Plus } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form"
+import { z } from "zod"
+
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog"
 import {
     Form,
     FormControl,
@@ -15,17 +24,11 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { useAlert } from "@/hooks/useAlert";
+import { getPocketBase } from "@/lib/pocketbase";
 import { AlertType } from "@/lib/utils/AlertContextUtils";
-import { Plus } from "lucide-react";
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "@/components/ui/dialog"
+import { UserRecord } from "@/types/types";
+
 
 const Profile = () => {
     const pb = getPocketBase();
@@ -58,7 +61,8 @@ const Profile = () => {
         try {
             console.log('values:', values);
         } catch (error) {
-            showAlert('Error', "", { type: AlertType.Error });
+            const errorMessage = error instanceof Error ? error.message : String(error);
+            showAlert('Error', errorMessage, { type: AlertType.Error });
             return;
         }
     };
@@ -84,7 +88,8 @@ const Profile = () => {
         try {
             console.log('values:', values);
         } catch (error) {
-            showAlert('Error', "", { type: AlertType.Error });
+            const errorMessage = error instanceof Error ? error.message : String(error);
+            showAlert('Error', errorMessage, { type: AlertType.Error });
             return;
         }
     };
@@ -106,7 +111,8 @@ const Profile = () => {
         try {
             console.log('values:', values);
         } catch (error) {
-            showAlert('Error', "", { type: AlertType.Error });
+            const errorMessage = error instanceof Error ? error.message : String(error);
+            showAlert('Error', errorMessage, { type: AlertType.Error });
             return;
         }
     };

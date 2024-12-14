@@ -1,14 +1,16 @@
-import { getPocketBase } from "@/lib/pocketbase";
-import { useLogout } from "@/hooks/useLogout";
 import { Avatar, AvatarFallback, AvatarImage } from '@radix-ui/react-avatar';
+import { UserRoundPen, Settings, LogOut, LogIn } from "lucide-react";
+import { Link } from "react-router-dom";
+
+import { Button } from "../ui/button";
+
 import {
 	Popover,
 	PopoverContent,
 	PopoverTrigger,
 } from "@/components/ui/popover"
-import { Button } from "../ui/button";
-import { UserRoundPen, Settings, LogOut, LogIn } from "lucide-react";
-import { Link } from "react-router-dom";
+import { useLogout } from "@/hooks/useLogout";
+import { getPocketBase } from "@/lib/pocketbase";
 
 export const NavbarPublic = ({ title, children }: { title: string; children: React.ReactNode }) => {
 	const pb = getPocketBase();
