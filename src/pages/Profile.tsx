@@ -122,7 +122,6 @@ const Profile = () => {
         }
     }, [userModel?.id]);
 
-    // TODO: Bug, when the form is submitted, the errors unalign the form fields
     return (
         <>
             {userObj && (
