@@ -18,12 +18,23 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { AlertType } from "@/lib/utils/AlertContextUtils";
 import { Plus } from "lucide-react";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog"
 
 const Profile = () => {
     const pb = getPocketBase();
     const userModel = pb.authStore.model;
     const [userObj, setUserObj] = useState<UserRecord | null>(null);
     const [userAvatarImage, setUserAvatarImage] = useState<string>();
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [isProfileDialogOpen, setIsProfileDialogOpen] = useState(false);
+
     const { showAlert } = useAlert();
 
     const generalInformationFormSchema = z.object({
@@ -122,6 +133,34 @@ const Profile = () => {
         }
     }, [userModel?.id]);
 
+    const handleProfilePictureChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) setSelectedFile(file);
+    };
+
+    const handleSaveClick = async () => {
+        try {
+            if (!selectedFile || !userModel) {
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('avatar', selectedFile);
+
+            await pb.collection('users').update(userModel.id, formData);
+            await fetchRecords();
+
+            setSelectedFile(null);
+            setIsProfileDialogOpen(false);
+            showAlert('Profile Picture Updated', "", { type: AlertType.Success });
+
+        } catch (error) {
+            console.error('Error updating profile picture:', error);
+            showAlert('Failed to update profile picture', "", { type: AlertType.Error });
+            setIsProfileDialogOpen(false);
+        }
+    };
+
     return (
         <>
             {userObj && (
@@ -147,12 +186,57 @@ const Profile = () => {
                                     </AvatarFallback>
                                 </Avatar>
                                 <div className="flex flex-col items-start">
-                                    <button className="mt-2 underline text-blue-600 hover:text-blue-800">
-                                        Edit Picture
-                                    </button>
-                                    <button className="mt-2 underline text-blue-600 hover:text-blue-800">
-                                        Delete Picture
-                                    </button>
+                                    <Dialog
+                                        open={isProfileDialogOpen}
+                                        onOpenChange={(open) => {
+                                            setIsProfileDialogOpen(open);
+                                            if (!open) {
+                                                setSelectedFile(null);
+                                            }
+                                        }}
+                                    >
+                                        <DialogTrigger className="mt-2 underline text-blue-600 hover:text-blue-800">
+                                            Edit Picture
+                                        </DialogTrigger>
+                                        <DialogContent>
+                                            <DialogHeader className="border-b pb-5">
+                                                <DialogTitle>Edit Picture</DialogTitle>
+                                                <DialogDescription>
+                                                    You can upload a new profile picture here.
+                                                </DialogDescription>
+                                            </DialogHeader>
+                                            <div className="flex flex-row items-center gap-4 mt-5">
+                                                <Avatar>
+                                                    <AvatarImage
+                                                        src={userModel?.avatar ? `${pb.baseUrl}/api/files/${userModel.collectionId}/${userModel.id}/${userModel.avatar}` : "https://github.com/shadcn.png"}
+                                                        className='rounded-full'
+                                                    />
+                                                    <AvatarFallback>{userModel?.name?.charAt(0) || 'U'}</AvatarFallback>
+                                                </Avatar>
+                                                <div className="grid w-full max-w-sm items-center gap-1.5">
+                                                    <Input id="picture" type="file" className="rounded-xl" onChange={handleProfilePictureChange} />
+                                                </div>
+                                                <Button
+                                                    className='bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-xl focus:outline-none focus:shadow-outline'
+                                                    onClick={handleSaveClick}
+                                                >
+                                                    Save
+                                                </Button>
+                                            </div>
+                                        </DialogContent>
+                                    </Dialog>
+                                    <Dialog>
+                                        <DialogTrigger className="mt-2 underline text-blue-600 hover:text-blue-800">Delete Picture</DialogTrigger>
+                                        <DialogContent>
+                                            <DialogHeader>
+                                                <DialogTitle>Are you absolutely sure?</DialogTitle>
+                                                <DialogDescription>
+                                                    This action cannot be undone. This will permanently delete your account
+                                                    and remove your data from our servers.
+                                                </DialogDescription>
+                                            </DialogHeader>
+                                        </DialogContent>
+                                    </Dialog>
                                 </div>
                             </div>
                         </div>
