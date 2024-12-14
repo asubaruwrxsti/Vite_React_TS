@@ -1,3 +1,5 @@
+import { AlertCircle, CheckCircle, Info } from 'lucide-react';
+
 // Define the interface for the context
 export type AlertContextType = {
     showAlert: (title: string, description: string, options?: AlertOptions) => void;
@@ -31,11 +33,20 @@ export interface AlertContent {
 export const getAlertStyles = (alertContent: AlertContent) => {
     switch (alertContent.type) {
         case AlertType.Error:
-            return 'border-red-500 bg-red-50';
+            return {
+                styles: 'border-red-500 bg-red-50',
+                icon: AlertCircle
+            };
         case AlertType.Success:
-            return 'border-green-500 bg-green-50';
+            return {
+                styles: 'border-green-500 bg-green-50',
+                icon: CheckCircle
+            };
         case AlertType.Info:
         default:
-            return 'border-blue-500 bg-blue-50';
+            return {
+                styles: 'border-blue-500 bg-blue-50',
+                icon: Info
+            };
     }
 };

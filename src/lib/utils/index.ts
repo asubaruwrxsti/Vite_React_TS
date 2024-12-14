@@ -17,7 +17,14 @@ export const formatPrice = (price: number): string => {
   }).format(price);
 };
 
-export const formatDate = (dateString: string) => {
+export const formatDate = (dateString: string, includeHours = true) => {
   const date = new Date(dateString);
-  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+  const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+
+  if (includeHours) {
+    const formattedTime = `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}:${String(date.getSeconds()).padStart(2, '0')}`;
+    return `${formattedDate} ${formattedTime}`;
+  }
+
+  return formattedDate;
 };

@@ -1,10 +1,9 @@
 import { RouteConfig } from "@/types/types";
 import Home from "@/pages/Home";
 import Dashboard from "@/pages/Dashboard";
-import Checkout from "@/pages/Checkout";
 import Login from "@/components/Login";
 import Profile from "@/pages/Profile";
-import { CircleGauge, House, LogIn, ScanBarcode, UserPen } from "lucide-react";
+import { CircleGauge, House, LogIn, UserPen } from "lucide-react";
 
 export const DEFAULT_TIMEOUT = 3000;
 export const CURRENCY = 'ALL';
@@ -23,13 +22,6 @@ export const AppRoutes: RouteConfig[] = [
         element: Dashboard,
         protected: true,
         icon: CircleGauge,
-    },
-    {
-        path: '/checkout',
-        name: 'Checkout',
-        element: Checkout,
-        protected: true,
-        icon: ScanBarcode,
     },
     {
         path: '/profile',

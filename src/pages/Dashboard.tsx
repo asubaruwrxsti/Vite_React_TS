@@ -1,7 +1,11 @@
-import Footer from '../components/layout/Footer';
-import Navbar from '../components/layout/Navbar';
-import { useAlert } from '@/hooks/useAlert';
-import { useNavigate } from 'react-router-dom';
+import { getPocketBase } from '@/lib/pocketbase';
+import { useEffect, useState } from 'react';
+import { BeaconRecord, PaymentInfoRecord, SubscriptionRecord } from '@/types/types';
+import { CURRENCY } from '@/lib/constants';
+import { formatDate } from '@/lib/utils';
+import { ListResult } from 'pocketbase';
+import { calculateNextPayment } from '@/lib/utils/DashboardUtils';
+import { WalletCards } from 'lucide-react';
 
 /**
  * The Dashboard page
@@ -9,75 +13,86 @@ import { useNavigate } from 'react-router-dom';
  */
 
 const Dashboard = () => {
-	const { showAlert } = useAlert();
-	const history = useNavigate();
+	const pb = getPocketBase();
+	const userModel = pb.authStore.model;
+	const [subscriptionObj, setsubscriptionObj] = useState<SubscriptionRecord | null>(null);
+	const [beaconsObj, setBeaconsObj] = useState<ListResult<BeaconRecord> | null>(null);
+	const [paymentMethodObj, setPaymentMethodObj] = useState<PaymentInfoRecord | null>(null);
 
-	// Get the flight data from localStorage
-	let flightData = JSON.parse(localStorage.getItem('flightData') || '[]');
-	// Convert the flight data to an array (it is an object if there is only one flight)
-	if (!Array.isArray(flightData)) {
-		flightData = [flightData];
-	}
+	const fetchRecords = async () => {
+		try {
+			const subscriptions = await pb.collection('subscription').getList<SubscriptionRecord>(1, 1, {
+				filter: `owner.id = "${userModel?.id}"`,
+				expand: 'type',
+			});
+			setsubscriptionObj(subscriptions.items[0]);
+
+			const beacons = await pb.collection('beacons').getList<BeaconRecord>(1, 10, {
+				filter: `owner.id = "${userModel?.id}"`,
+				expand: 'owner'
+			});
+			setBeaconsObj(beacons);
+
+			const paymentInfo = await pb.collection('payment_info').getList<PaymentInfoRecord>(1, 10, {
+				filter: `owner.id = "${userModel?.id}" && favorite = true`,
+				expand: 'owner'
+			});
+			setPaymentMethodObj(paymentInfo.items[0]);
+			console.log('paymentInfo', paymentInfo);
+		} catch (error) {
+			console.error('Error:', error);
+		}
+	};
+
+	useEffect(() => {
+		if (userModel?.id) {
+			fetchRecords();
+		}
+	}, [userModel?.id]);
 
 	return (
 		<div>
-			{/*  Transform the flight data into a list of booked flights */}
-			{flightData.length > 0 ? (
-				<div className="container mx-auto p-4">
-					<h1 className="text-2xl font-bold mb-4">Your Booked Flights</h1>
-					<div className="grid grid-cols-3 gap-4">
-						{flightData.map((flight: any, index: number) => (
-							// Display the flight details
-							<div
-								key={index}
-								className="bg-blue-100 p-4 rounded flex flex-col justify-between"
-							>
-								<div>
-									<h2 className="text-xl font-bold">
-										{flight.from} - {flight.to}
-									</h2>
-									<p className="text-gray-700">
-										{flight.departDate} - {flight.returnDate}
-									</p>
+			{subscriptionObj && (
+				<div className="flex flex-row justify-between gap-4">
+					<div className="flex flex-col items-start">
+						<div className="p-4 rounded-lg text-left shadow-lg p-8">
+							<div className="flex flex-row items-center gap-4 mb-4 pb-2 border-b">
+								<WalletCards className='p-2 bg-[#4338ca] rounded-lg text-white' size={32} />
+								<h2 className="text-2xl font-bold">Subscription Details</h2>
+							</div>
+							<div className="grid grid-cols-2">
+								<div className="p-4 rounded-lg col-span-2 flex flex-row justify-between gap-2">
+									<p className="font-semibold">Subscription Type:</p>
+									<p>{subscriptionObj.expand.type.name}</p>
 								</div>
-								<div>
-									<p className="text-gray-700">
-										Price: ${flight.price} x {flight.seats} seats
-									</p>
-									<p className="text-gray-700">Total: ${flight.total}</p>
+								<div className="border p-4 rounded-lg col-span-2 flex flex-row justify-between gap-2">
+									<p className="font-semibold">{subscriptionObj.expand.type.price} {CURRENCY}</p>
+									<p>on {formatDate(calculateNextPayment(subscriptionObj.created, subscriptionObj.expand.type.payment_interval.toLowerCase()), false)}</p>
 								</div>
-								<div className="text-gray-700">
-									<p>Car Accomodation: ${flight.carAccomodation.price}</p>
-									<p>Hotel Accomodation: ${flight.hotelAccomodation.price}</p>
+								<div className="p-4 rounded-lg col-span-2 flex flex-row justify-between gap-2">
+									<p className="font-semibold">Subscription Valid Until:</p>
+									<p>{formatDate(subscriptionObj.valid_until, false)}</p>
 								</div>
-								{/* Cancel Flight button */}
-								<div className="flex justify-end">
-									<button
-										onClick={() => {
-											// Remove the flight from localStorage, then reload the page
-											let flightData = JSON.parse(
-												localStorage.getItem('flightData') || '[]'
-											);
-											flightData.splice(index, 1);
-											localStorage.setItem(
-												'flightData',
-												JSON.stringify(flightData)
-											);
-											showAlert('Success', 'Flight Cancelled');
-											history("/");
-										}}
-										className="bg-red-500 text-white px-4 py-2 rounded focus:outline-none hover:bg-red-600 transition duration-300"
-									>
-										Cancel
-									</button>
+								<div className="p-4 rounded-lg col-span-2 flex flex-row justify-between gap-2">
+									<p className="font-semibold">Card ending in:</p>
+									<p>{'**** **** **** ' + paymentMethodObj?.credit_card_number.slice(-4)}</p>
 								</div>
 							</div>
-						))}
+						</div>
 					</div>
-				</div>
-			) : (
-				<div className="container mx-auto p-4">
-					<h1 className="text-2xl font-bold mb-4">No Booked Flights</h1>
+
+					<div className="flex flex-col items-start gap-4 w-2/3">
+						<h2 className="text-2xl font-bold mb-2">Active Beacons</h2>
+						<div className="flex flex-row flex-wrap gap-4">
+							{beaconsObj?.items.map((beacon) => (
+								<div key={beacon.id} className="flex flex-col gap-2 p-4 bg-primary/10 rounded-lg text-left shadow-lg">
+									<p>Beacon Name: {beacon.name}</p>
+									<p>Status: {beacon.active ? 'Active' : 'Inactive'}</p>
+									<p>Last Seen: {formatDate(beacon.last_seen)}</p>
+								</div>
+							))}
+						</div>
+					</div>
 				</div>
 			)}
 		</div>

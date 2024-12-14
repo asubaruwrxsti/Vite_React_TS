@@ -39,6 +39,7 @@ export interface UserRecord {
 };
 
 export interface BeaconRecord {
+    id: string;
     name: string;
     active: boolean;
     last_seen: string;
@@ -52,4 +53,23 @@ export interface PaymentInfoRecord {
     owner: string;
     cvv: string;
     favorite: boolean;
+}
+
+export interface SubscriptionRecord {
+    id: string;
+    owner: UserRecord;
+    type: string;
+    expand: {
+        type: SubscriptionTypeRecord;
+    };
+    valid_until: string;
+    created: string;
+    updated: string;
+}
+
+interface SubscriptionTypeRecord {
+    id: string;
+    name: string;
+    price: number;
+    payment_interval: string;
 }
