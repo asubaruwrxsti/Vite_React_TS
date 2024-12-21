@@ -1,4 +1,5 @@
 import { atom } from 'recoil';
+
 import { TravelDetails } from '@/types/types';
 
 export const paramState = atom({

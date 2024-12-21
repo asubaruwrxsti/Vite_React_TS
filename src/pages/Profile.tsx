@@ -1,11 +1,20 @@
-import { useAlert } from "@/hooks/useAlert";
-import { getPocketBase } from "@/lib/pocketbase";
-import { UserRecord } from "@/types/types";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { useEffect, useState } from "react";
-import { z } from "zod"
+import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod"
+import { Plus } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form"
+import { z } from "zod"
+
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog"
 import {
     Form,
     FormControl,
@@ -15,17 +24,11 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { useAlert } from "@/hooks/useAlert";
+import { getPocketBase } from "@/lib/pocketbase";
 import { AlertType } from "@/lib/utils/AlertContextUtils";
-import { Plus } from "lucide-react";
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "@/components/ui/dialog"
+import { UserRecord } from "@/types/types";
+
 
 const Profile = () => {
     const pb = getPocketBase();
@@ -33,7 +36,8 @@ const Profile = () => {
     const [userObj, setUserObj] = useState<UserRecord | null>(null);
     const [userAvatarImage, setUserAvatarImage] = useState<string>();
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
-    const [isProfileDialogOpen, setIsProfileDialogOpen] = useState(false);
+    const [isProfilePhotoUpdateDialogOpen, setIsProfilePhotoUpdateDialogOpen] = useState(false);
+    const [isProfileDeleteDialogOpen, setIsProfileDeleteDialogOpen] = useState(false);
 
     const { showAlert } = useAlert();
 
@@ -58,7 +62,8 @@ const Profile = () => {
         try {
             console.log('values:', values);
         } catch (error) {
-            showAlert('Error', "", { type: AlertType.Error });
+            const errorMessage = error instanceof Error ? error.message : String(error);
+            showAlert('Error', errorMessage, { type: AlertType.Error });
             return;
         }
     };
@@ -84,7 +89,8 @@ const Profile = () => {
         try {
             console.log('values:', values);
         } catch (error) {
-            showAlert('Error', "", { type: AlertType.Error });
+            const errorMessage = error instanceof Error ? error.message : String(error);
+            showAlert('Error', errorMessage, { type: AlertType.Error });
             return;
         }
     };
@@ -104,10 +110,15 @@ const Profile = () => {
 
     async function handleEmailUpdate(values: z.infer<typeof emailFormSchema>) {
         try {
-            console.log('values:', values);
+            await pb.collection('users').requestEmailChange(values.email.trim());
+            showAlert('Success', 'Email change request sent. Please check your inbox.', { type: AlertType.Success });
+            
+            // Back-end API should send an email with a token to confirm the email change.
+            // See this https://pocketbase.io/docs/api-records/#email-change
+
         } catch (error) {
-            showAlert('Error', "", { type: AlertType.Error });
-            return;
+            const errorMessage = error instanceof Error ? error.message : String(error);
+            showAlert('Error', errorMessage, { type: AlertType.Error });
         }
     };
 
@@ -151,13 +162,33 @@ const Profile = () => {
             await fetchRecords();
 
             setSelectedFile(null);
-            setIsProfileDialogOpen(false);
+            setIsProfilePhotoUpdateDialogOpen(false);
             showAlert('Profile Picture Updated', "", { type: AlertType.Success });
 
         } catch (error) {
             console.error('Error updating profile picture:', error);
             showAlert('Failed to update profile picture', "", { type: AlertType.Error });
-            setIsProfileDialogOpen(false);
+            setIsProfilePhotoUpdateDialogOpen(false);
+        }
+    };
+
+    const handleDeleteClick = async () => {
+        try {
+            if (!userModel) {
+                return;
+            }
+
+            await pb.collection('users').update(userModel.id, { avatar: null });
+            await fetchRecords();
+
+            setSelectedFile(null);
+            setIsProfileDeleteDialogOpen(false);
+            showAlert('Profile Picture Deleted', "", { type: AlertType.Success });
+
+        } catch (error) {
+            console.error('Error deleting profile picture:', error);
+            showAlert('Failed to delete profile picture', "", { type: AlertType.Error });
+            setIsProfileDeleteDialogOpen(false);
         }
     };
 
@@ -187,9 +218,9 @@ const Profile = () => {
                                 </Avatar>
                                 <div className="flex flex-col items-start">
                                     <Dialog
-                                        open={isProfileDialogOpen}
+                                        open={isProfilePhotoUpdateDialogOpen}
                                         onOpenChange={(open) => {
-                                            setIsProfileDialogOpen(open);
+                                            setIsProfilePhotoUpdateDialogOpen(open);
                                             if (!open) {
                                                 setSelectedFile(null);
                                             }
@@ -208,7 +239,7 @@ const Profile = () => {
                                             <div className="flex flex-row items-center gap-4 mt-5">
                                                 <Avatar>
                                                     <AvatarImage
-                                                        src={userModel?.avatar ? `${pb.baseUrl}/api/files/${userModel.collectionId}/${userModel.id}/${userModel.avatar}` : "https://github.com/shadcn.png"}
+                                                        src={`${pb.baseUrl}/api/files/${userModel?.collectionId}/${userModel?.id}/${userModel?.avatar}`}
                                                         className='rounded-full'
                                                     />
                                                     <AvatarFallback>{userModel?.name?.charAt(0) || 'U'}</AvatarFallback>
@@ -225,16 +256,34 @@ const Profile = () => {
                                             </div>
                                         </DialogContent>
                                     </Dialog>
-                                    <Dialog>
+                                    <Dialog
+                                        open={isProfileDeleteDialogOpen}
+                                        onOpenChange={(open) => {
+                                            setIsProfileDeleteDialogOpen(open);
+                                        }}
+                                    >
                                         <DialogTrigger className="mt-2 underline text-blue-600 hover:text-blue-800">Delete Picture</DialogTrigger>
                                         <DialogContent>
-                                            <DialogHeader>
-                                                <DialogTitle>Are you absolutely sure?</DialogTitle>
+                                            <DialogHeader className="border-b pb-5">
+                                                <DialogTitle>Are you sure?</DialogTitle>
                                                 <DialogDescription>
-                                                    This action cannot be undone. This will permanently delete your account
-                                                    and remove your data from our servers.
+                                                    This action will remove your profile picture.
                                                 </DialogDescription>
                                             </DialogHeader>
+                                            <div className="flex justify-end gap-4 mt-5">
+                                                <Button
+                                                    className='bg-red-500 hover:bg-red-700 text-white font-bold rounded-xl focus:outline-none focus:shadow-outline'
+                                                    onClick={handleDeleteClick}
+                                                >
+                                                    Delete
+                                                </Button>
+                                                <Button
+                                                    className='bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-xl focus:outline-none focus:shadow-outline'
+                                                    onClick={() => setIsProfileDeleteDialogOpen(false)}
+                                                >
+                                                    Cancel
+                                                </Button>
+                                            </div>
                                         </DialogContent>
                                     </Dialog>
                                 </div>

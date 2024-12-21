@@ -1,4 +1,6 @@
 import { createContext, useState, ReactNode, useEffect } from 'react';
+import React from 'react';
+
 import {
     AlertDialog,
     AlertDialogAction,
@@ -7,10 +9,9 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { AlertContent, AlertOptions, AlertType, AlertContextType, getAlertStyles } from '@/lib/utils/AlertContextUtils';
-import { cn } from '@/lib/utils';
 import { DEFAULT_TIMEOUT } from '@/lib/constants';
-import React from 'react';
+import { cn } from '@/lib/utils';
+import { AlertContent, AlertOptions, AlertType, AlertContextType, getAlertStyles } from '@/lib/utils/AlertContextUtils';
 
 // Create the context with a defined type
 export const AlertContext = createContext<AlertContextType | undefined>(undefined);

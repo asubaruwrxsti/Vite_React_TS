@@ -1,7 +1,10 @@
-import { useAlert } from '@/hooks/useAlert';
-import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { Terminal } from 'lucide-react';
 import { useForm } from "react-hook-form"
+import { useNavigate } from 'react-router-dom';
+import { z } from "zod"
+
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import {
 	Form,
@@ -12,11 +15,10 @@ import {
 	FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { useAlert } from '@/hooks/useAlert';
 import { getPocketBase } from '@/lib/pocketbase';
 import { AlertType } from '@/lib/utils/AlertContextUtils';
-import { useNavigate } from 'react-router-dom';
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { Terminal } from 'lucide-react';
+
 
 /**
  * The Login component
@@ -53,7 +55,8 @@ const Login = () => {
 			showAlert('Success', "Login successful", { type: AlertType.Success });
 			navigate('/');
 		} catch (error) {
-			showAlert('Error', "Invalid username or password!", { type: AlertType.Error });
+			const errorMessage = error instanceof Error ? error.message : String(error);
+			showAlert('Error', errorMessage, { type: AlertType.Error });
 			return;
 		}
 	};
