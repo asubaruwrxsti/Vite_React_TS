@@ -1,11 +1,13 @@
-import { getPocketBase } from '@/lib/pocketbase';
-import { useEffect, useState } from 'react';
-import { BeaconRecord, PaymentInfoRecord, SubscriptionRecord } from '@/types/types';
-import { CURRENCY } from '@/lib/constants';
-import { formatDate } from '@/lib/utils';
-import { ListResult } from 'pocketbase';
-import { calculateNextPayment } from '@/lib/utils/DashboardUtils';
 import { WalletCards } from 'lucide-react';
+import { ListResult } from 'pocketbase';
+import { useEffect, useState } from 'react';
+
+import { CURRENCY } from '@/lib/constants';
+import { getPocketBase } from '@/lib/pocketbase';
+import { formatDate } from '@/lib/utils';
+import { calculateNextPayment } from '@/lib/utils/DashboardUtils';
+import { BeaconRecord, PaymentInfoRecord, SubscriptionRecord } from '@/types/types';
+
 
 /**
  * The Dashboard page

@@ -1,14 +1,15 @@
+import { ArrowUp } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
-import { AlertProvider } from './contexts/AlertContext';
-import { getPocketBase } from './lib/pocketbase';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import Footer from './components/layout/Footer';
-import { AppRoutes } from './lib/constants';
-import { useEffect, useState } from 'react';
-import { NavbarPublic } from './components/layout/NavbarPublic';
 import { NavbarAuth } from './components/layout/NavbarAuth';
-import { ArrowUp } from 'lucide-react';
+import { NavbarPublic } from './components/layout/NavbarPublic';
+import { AlertProvider } from './contexts/AlertContext';
+import { AppRoutes } from './lib/constants';
+import { getPocketBase } from './lib/pocketbase';
+
 
 
 /**

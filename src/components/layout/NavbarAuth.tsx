@@ -1,6 +1,7 @@
 import { AppWindowMac, Bell, CircleHelp, CircleUserRound, House, KeyRound, PictureInPicture2, Radio, Settings, UserRound } from 'lucide-react';
-import { Input } from "@/components/ui/input"
 import { Link } from "react-router-dom";
+
+import { Input } from "@/components/ui/input"
 
 export const NavbarAuth = ({ children }: { children: React.ReactNode }) => {
 	return (
