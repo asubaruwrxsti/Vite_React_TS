@@ -113,6 +113,7 @@ const Profile = () => {
             await pb.collection('users').requestEmailChange(values.email.trim());
             showAlert('Success', 'Email change request sent. Please check your inbox.', { type: AlertType.Success });
             
+            // TODO:
             // Back-end API should send an email with a token to confirm the email change.
             // See this https://pocketbase.io/docs/api-records/#email-change
 
