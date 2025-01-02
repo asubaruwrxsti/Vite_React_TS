@@ -1,9 +1,11 @@
-import { AppWindowMac, Bell, CircleHelp, CircleUserRound, House, KeyRound, PictureInPicture2, Radio, Settings, UserRound } from 'lucide-react';
+import { Bell, CircleHelp, CircleUserRound, House, Settings } from 'lucide-react';
 import { Link } from "react-router-dom";
-
 import { Input } from "@/components/ui/input"
+import { NavAuthRoutes } from '@/lib/constants';
 
 export const NavbarAuth = ({ children }: { children: React.ReactNode }) => {
+	const currentUrl = window.location.pathname;
+
 	return (
 		<div className="p-16">
 			<div className="flex">
@@ -37,48 +39,19 @@ export const NavbarAuth = ({ children }: { children: React.ReactNode }) => {
 						</h2>
 						<Input placeholder="Search" className='rounded-full' />
 						<div className="flex flex-col mt-5">
-							<Link to="#" className="group flex items-start gap-8 mb-2 border-b p-4 hover:bg-gray-100 transition-all transform hover:scale-105 rounded-2xl duration-500 hover:shadow-lg">
-								<UserRound />
-								<div className="flex flex-col">
-									<span>Profile</span>
-									<span className="text-sm text-gray-500">Setting description here</span>
-								</div>
-							</Link>
-							<Link to="#" className="group flex items-start gap-8 mb-2 border-b p-4 hover:bg-gray-100 transition-all transform hover:scale-105 rounded-2xl duration-500 hover:shadow-lg">
-								<PictureInPicture2 />
-								<div className="flex flex-col">
-									<span>Subscription</span>
-									<span className="text-sm text-gray-500">Setting description here</span>
-								</div>
-							</Link>
-							<Link to="#" className="group flex items-start gap-8 mb-2 border-b p-4 hover:bg-gray-100 transition-all transform hover:scale-105 rounded-2xl duration-500 hover:shadow-lg">
-								<Radio />
-								<div className="flex flex-col">
-									<span>Beacon</span>
-									<span className="text-sm text-gray-500">Setting description here</span>
-								</div>
-							</Link>
-							<Link to="#" className="group flex items-start gap-8 mb-2 border-b p-4 hover:bg-gray-100 transition-all transform hover:scale-105 rounded-2xl duration-500 hover:shadow-lg">
-								<AppWindowMac />
-								<div className="flex flex-col">
-									<span>App configuration</span>
-									<span className="text-sm text-gray-500">Setting description here</span>
-								</div>
-							</Link>
-							<Link to="#" className="group flex items-start gap-8 mb-2 border-b p-4 hover:bg-gray-100 transition-all transform hover:scale-105 rounded-2xl duration-500 hover:shadow-lg">
-								<Bell />
-								<div className="flex flex-col">
-									<span>Notification</span>
-									<span className="text-sm text-gray-500">Setting description here</span>
-								</div>
-							</Link>
-							<Link to="#" className="group flex items-start gap-8 mb-2 border-b p-4 hover:bg-gray-100 transition-all transform hover:scale-105 rounded-2xl duration-500 hover:shadow-lg">
-								<KeyRound />
-								<div className="flex flex-col">
-									<span>Privacy</span>
-									<span className="text-sm text-gray-500">Setting description here</span>
-								</div>
-							</Link>
+							{NavAuthRoutes.map((route, index) => (
+								<Link
+									key={index}
+									to={route.path}
+									className={`group flex items-start gap-8 mb-2 border-b p-4 transition-all transform rounded-2xl duration-500 ${currentUrl === route.path ? 'bg-gray-100 scale-105 shadow-lg bg-violet-200' : 'hover:bg-gray-100 hover:scale-105 hover:shadow-lg'}`}
+								>
+									<route.icon />
+									<div className="flex flex-col">
+										<span>{route.name}</span>
+										<span className="text-sm text-gray-500">{route.description}</span>
+									</div>
+								</Link>
+							))}
 						</div>
 					</div>
 				</div>
