@@ -32,7 +32,7 @@ import { UserRecord } from "@/types/types";
 
 const Profile = () => {
     const pb = getPocketBase();
-    const userModel = pb.authStore.model;
+    const userModel = pb.authStore.record;
     const [userObj, setUserObj] = useState<UserRecord | null>(null);
     const [userAvatarImage, setUserAvatarImage] = useState<string>();
     const [selectedFile, setSelectedFile] = useState<File | null>(null);

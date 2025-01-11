@@ -16,7 +16,7 @@ import { BeaconRecord, PaymentInfoRecord, SubscriptionRecord } from '@/types/typ
 
 const Dashboard = () => {
 	const pb = getPocketBase();
-	const userModel = pb.authStore.model;
+	const userModel = pb.authStore.record;
 	const [subscriptionObj, setsubscriptionObj] = useState<SubscriptionRecord | null>(null);
 	const [beaconsObj, setBeaconsObj] = useState<ListResult<BeaconRecord> | null>(null);
 	const [paymentMethodObj, setPaymentMethodObj] = useState<PaymentInfoRecord | null>(null);
