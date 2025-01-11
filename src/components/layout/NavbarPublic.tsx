@@ -15,7 +15,7 @@ import { UserRecord } from '@/types/types';
 
 export const NavbarPublic = ({ title, children }: { title: string; children: React.ReactNode }) => {
 	const pb = getPocketBase();
-	const userModel = pb.authStore.model;
+	const userModel = pb.authStore.record;
 	const [userAvatarImage, setUserAvatarImage] = useState<string>();
 	const [userObj, setUserObj] = useState<UserRecord | null>(null);
 	const logout = useLogout();
