@@ -1,7 +1,8 @@
-import { AppWindowMac, Bell, CircleHelp, CircleUserRound, House, KeyRound, PictureInPicture2, Radio, Settings, UserRound } from 'lucide-react';
+import { Bell, CircleHelp, CircleUserRound, House, Settings } from 'lucide-react';
 import { Link } from "react-router-dom";
-
 import { Input } from "@/components/ui/input"
+import { NavAuthRoutes } from '@/lib/constants';
+
 export const NavbarAuth = ({ children }: { children: React.ReactNode }) => {
 	return (
 		<div className="flex gap-4 p-16 min-h-screen">
@@ -22,12 +23,9 @@ export const NavbarAuth = ({ children }: { children: React.ReactNode }) => {
 				<Input placeholder="Search" className="rounded-full mt-5" />
 
 				<div className="flex flex-col gap-2 mt-5">
-					<SettingsLink icon={<UserRound />} title="Profile" />
-					<SettingsLink icon={<PictureInPicture2 />} title="Subscription" />
-					<SettingsLink icon={<Radio />} title="Beacon" />
-					<SettingsLink icon={<AppWindowMac />} title="App configuration" />
-					<SettingsLink icon={<Bell />} title="Notification" />
-					<SettingsLink icon={<KeyRound />} title="Privacy" />
+					{NavAuthRoutes.map((route, index) => (
+						<SettingsLink key={index} icon={<route.icon />} title={route.name} link={route.path} />
+					))}
 				</div>
 			</aside>
 
