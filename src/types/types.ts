@@ -21,6 +21,7 @@ export interface RouteConfig {
     protected: boolean;
     icon: ComponentType;
     redirectIfLoggedIn?: boolean;
+    description?: string;
 }
 
 export interface UserRecord {

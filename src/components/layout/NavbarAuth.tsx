@@ -1,8 +1,9 @@
-import { AppWindowMac, Bell, CircleHelp, CircleUserRound, House, KeyRound, PictureInPicture2, Radio, Settings, UserRound } from 'lucide-react';
+import { Bell, CircleHelp, CircleUserRound, House, Settings } from 'lucide-react';
 import { Link } from "react-router-dom";
-
 import { Input } from "@/components/ui/input"
 export const NavbarAuth = ({ children }: { children: React.ReactNode }) => {
+	const currentUrl = window.location.pathname;
+
 	return (
 		<div className="flex gap-4 p-16 min-h-screen">
 			{/* Icon Sidebar */}

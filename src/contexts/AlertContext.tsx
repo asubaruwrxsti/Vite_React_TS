@@ -33,8 +33,19 @@ export const AlertProvider = ({ children }: { children: ReactNode }) => {
                 setIsOpen(false);
             }, alertContent.timeout);
         }
-        return () => clearTimeout(timeoutId);
+
+        return () => {
+            clearTimeout(timeoutId);
+            document.body.style.pointerEvents = '';
+        };
     }, [isOpen, alertContent.timeout]);
+
+    useEffect(() => {
+        if (!isOpen) {
+            document.body.style.pointerEvents = '';
+            console.log('pointer-events: none removed');
+        }
+    }, [isOpen]);
 
     const showAlert = (
         title: string,
